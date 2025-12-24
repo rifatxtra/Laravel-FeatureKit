@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+
+/* Laravel Framework Sources */
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/* Application Sources - Feature-based architecture */
+@source '../../app/Features/**/*.blade.php';
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.jsx";
+@source "../**/*.vue";
+
+@theme {
+    /* Typography */
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    /* Extend with custom theme values here */
+    /* Example:
+    --color-primary: #3b82f6;
+    --radius-lg: 1rem;
+    */
+}
