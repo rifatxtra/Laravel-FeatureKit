@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Features\Auth\Services;
+
+use App\Core\BaseService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
+class LoginService extends BaseService
+{
+    /**
+     * Handle the login attempt.
+     *
+     * @param array $credentials
+     * @param bool $remember
+     * @return bool
+     * @throws ValidationException
+     */
+    public function attempt(array $credentials, bool $remember = false): bool
+    {
+        if (Auth::attempt($credentials, $remember)) {
+            request()->session()->regenerate();
+            return true;
+        }
+
+        throw ValidationException::withMessages([
+            'email' => __('auth.failed'),
+        ]);
+    }
+}
