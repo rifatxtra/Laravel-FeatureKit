@@ -1,7 +1,7 @@
 @extends('pages.layout')
 
 @section('title', 'Documentation - Laravel Feature Kit')
-@section('description', 'Complete technical documentation for Laravel FeatureKit v2.0.0. Architecture, utilities, commands, and more.')
+@section('description', 'Complete technical documentation for Laravel FeatureKit v2.1.0. Architecture, utilities, commands, and more.')
 
 @section('content')
 <div class="bg-base py-12">

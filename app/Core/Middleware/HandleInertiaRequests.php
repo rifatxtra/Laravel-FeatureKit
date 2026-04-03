@@ -37,20 +37,22 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
 
             // Auth data — powers useAuth(), useUser(), useIsAuthenticated(), useHasRole(), useHasPermission()
-            'auth' => fn () => [
+            'auth' => fn() => [
                 'check' => $request->user() !== null,
                 'user'  => $request->user() ? array_merge(
                     $request->user()->only(['id', 'name', 'email', 'phone', 'email_verified_at', 'created_at']),
                     [
                         // Include roles/permissions if the relationships exist on the User model
-                        'roles'       => method_exists($request->user(), 'roles') ? $request->user()->roles : [],
-                        'permissions' => method_exists($request->user(), 'permissions') ? $request->user()->permissions : [],
+                        'roles'                      => method_exists($request->user(), 'roles') ? $request->user()->roles : [],
+                        'permissions'                => method_exists($request->user(), 'permissions') ? $request->user()->permissions : [],
+                        'unread_notifications_count' => $request->user() ? $request->user()->notifications()->where('read_at', null)->count() : 0,
                     ]
                 ) : null,
             ],
+            'notifications' => $request->user() ? $request->user()->notifications()->latest()->limit(5)->get() : [],
 
             // Flash messages — powers useFlash(), useFlashSuccess(), Toast component
-            'flash' => fn () => [
+            'flash' => fn() => [
                 'success' => $request->session()->get('success'),
                 'error'   => $request->session()->get('error'),
                 'warning' => $request->session()->get('warning'),
@@ -59,10 +61,10 @@ class HandleInertiaRequests extends Middleware
             ],
 
             // CSRF token — powers useCsrfToken()
-            'csrf_token' => csrf_token(),
+            //'csrf_token' => csrf_token(),
 
             // App config — powers useAppConfig()
-            'app' => fn () => [
+            'app' => fn() => [
                 'name' => config('app.name'),
                 'env'  => config('app.env'),
             ],

@@ -8,28 +8,34 @@ use Illuminate\Support\Str;
 
 class MakeFeatureServiceCommand extends Command
 {
-    protected $signature = 'make:feature:service {feature : e.g. Auth or Dashboard/Admin} {name : e.g. LoginService}';
+    protected $signature = 'make:feature:service {feature : Feature name} {path* : [Role] [Name] (Name defaults to Service)}';
     protected $description = 'Create a service inside a feature';
 
     public function handle(): void
     {
         $feature = $this->argument('feature');
-        $name    = Str::studly($this->argument('name'));
-        $name    = Str::endsWith($name, 'Service') ? $name : $name . 'Service';
+        $path    = $this->argument('path');
 
-        $parts     = array_map(fn($p) => Str::studly($p), explode('/', $feature));
+        // Resolve name and role from path
+        $name = Str::studly(array_pop($path));
+        $name = Str::endsWith($name, 'Service') ? $name : $name . 'Service';
+
+        $rolePath  = !empty($path) ? implode('/', $path) : '';
+        $fullPath  = !empty($rolePath) ? "{$feature}/{$rolePath}" : $feature;
+
+        $parts     = array_map(fn($p) => Str::studly($p), explode('/', $fullPath));
         $namespace = 'App\\Features\\' . implode('\\', $parts) . '\\Services';
-        $path      = app_path('Features/' . implode('/', $parts) . "/Services/{$name}.php");
+        $filePath  = app_path('Features/' . implode('/', $parts) . "/Services/{$name}.php");
 
-        if (File::exists($path)) {
+        if (File::exists($filePath)) {
             $this->error("Service [{$name}] already exists!");
             return;
         }
 
-        File::ensureDirectoryExists(dirname($path));
-        File::put($path, $this->stub($namespace, $name));
+        File::ensureDirectoryExists(dirname($filePath));
+        File::put($filePath, $this->stub($namespace, $name));
 
-        $this->info("✅ Service [{$name}] created at app/Features/{$feature}/Services/{$name}.php");
+        $this->info("✅ Service [{$name}] created at app/Features/{$fullPath}/Services/{$name}.php");
     }
 
     private function stub(string $namespace, string $name): string

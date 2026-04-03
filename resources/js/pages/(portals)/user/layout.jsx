@@ -17,7 +17,6 @@ import {
     Key,
 } from "lucide-react";
 
-import Modal from "../../../Components/ui/Modal";
 import MainLayout from "../../../Components/Layout/MainLayout";
 
 /**
@@ -29,6 +28,7 @@ import MainLayout from "../../../Components/Layout/MainLayout";
 export default function UserLayout({ children }) {
     const { url, props } = usePage();
     const user = props.auth?.user;
+    const notifications = props.notifications ?? [];
 
     // Desktop: false = collapsed (icons only), true = expanded
     const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -46,16 +46,12 @@ export default function UserLayout({ children }) {
     }, [url]);
 
     const navigation = [
-        { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+        { name: "Dashboard", href: "/user/dashboard", icon: LayoutDashboard },
     ];
 
     const handleLogout = (e) => {
         e.preventDefault();
-        router.post(route("logout"));
-    };
-
-    const handleMarkAsRead = (id) => {
-        router.post(route("notifications.read", { id }));
+        router.post("/auth/logout");
     };
 
     const toggleMobileSidebar = () =>
@@ -275,13 +271,11 @@ export default function UserLayout({ children }) {
                                                                 |
                                                             </span>
                                                             <button
-                                                                onClick={() =>
+                                                                onClick={() => {
                                                                     router.post(
-                                                                        route(
-                                                                            "notifications.read-all",
-                                                                        ),
-                                                                    )
-                                                                }
+                                                                        "/user/notification/read-all",
+                                                                    );
+                                                                }}
                                                                 className="text-[10px] font-bold text-primary hover:underline uppercase tracking-tight"
                                                             >
                                                                 Mark all read
@@ -292,34 +286,23 @@ export default function UserLayout({ children }) {
                                             </div>
 
                                             <div className="max-h-[300px] overflow-y-auto">
-                                                {props.auth.notifications &&
-                                                props.auth.notifications
-                                                    .length > 0 ? (
-                                                    props.auth.notifications.map(
+                                                {notifications &&
+                                                notifications.length > 0 ? (
+                                                    notifications.map(
                                                         (notification) => (
                                                             <Link
+                                                                href={`/user/notification/${notification.id}`}
                                                                 key={
                                                                     notification.id
                                                                 }
-                                                                href={route(
-                                                                    "notifications.show",
-                                                                    {
-                                                                        id: notification.id,
-                                                                    },
-                                                                )}
                                                                 className={`block px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors cursor-pointer ${notification.is_read ? "opacity-60" : "bg-blue-50/30"}`}
                                                             >
                                                                 <p
-                                                                    className={`text-xs sm:text-sm truncate ${notification.is_read ? "text-gray-500 font-normal" : "text-gray-900 font-semibold"}`}
+                                                                    className={`text-xs sm:text-sm flex justify-between items-center ${notification.read_at ? "text-gray-500 font-normal" : "text-gray-900 font-semibold"}`}
                                                                 >
-                                                                    {notification.title ||
-                                                                        "New Notification"}
-                                                                </p>
-                                                                <p className="text-[10px] sm:text-xs text-gray-400 mt-1 flex items-center justify-between gap-2">
-                                                                    <span className="truncate flex-1">
-                                                                        {notification.description ||
-                                                                            "No details"}
-                                                                    </span>
+                                                                    {
+                                                                        notification.title
+                                                                    }
                                                                     <span className="text-[9px] sm:text-xs shrink-0">
                                                                         {new Date(
                                                                             notification.created_at,
@@ -340,19 +323,14 @@ export default function UserLayout({ children }) {
                                                 )}
                                             </div>
 
-                                            {user?.unread_notifications_count >
-                                                0 && (
-                                                <div className="p-2 border-t border-gray-50 text-center">
-                                                    <Link
-                                                        href={route(
-                                                            "notifications.index",
-                                                        )}
-                                                        className="text-xs font-semibold text-primary hover:underline"
-                                                    >
-                                                        View All
-                                                    </Link>
-                                                </div>
-                                            )}
+                                            <div className="p-2 border-t border-gray-50 text-center">
+                                                <Link
+                                                    href="/user/notification"
+                                                    className="text-xs font-semibold text-primary hover:underline"
+                                                >
+                                                    View All
+                                                </Link>
+                                            </div>
                                         </div>
                                     </>
                                 )}
@@ -400,7 +378,7 @@ export default function UserLayout({ children }) {
                                             </div>
 
                                             <Link
-                                                href={route("profile.edit")}
+                                                href="#"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
                                             >
                                                 <User
@@ -410,9 +388,7 @@ export default function UserLayout({ children }) {
                                                 Profile Settings
                                             </Link>
                                             <Link
-                                                href={route(
-                                                    "profile.password.edit",
-                                                )}
+                                                href="#"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
                                             >
                                                 <Key
@@ -431,7 +407,7 @@ export default function UserLayout({ children }) {
                                                         size={16}
                                                         className="mr-2"
                                                     />
-                                                    Sign Out
+                                                    Logout
                                                 </button>
                                             </div>
                                         </div>

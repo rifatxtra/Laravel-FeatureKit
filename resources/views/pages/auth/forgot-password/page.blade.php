@@ -44,7 +44,7 @@
 <div class="pt-8 text-center border-t border-border mt-10">
     <p class="text-surface-muted-foreground font-semibold">
         Remember your password?
-        <a href="{{ route('auth.login.index') }}" class="text-primary font-bold hover:underline">
+        <a href="{{ route('login') }}" class="text-primary font-bold hover:underline">
             Back to Login
         </a>
     </p>

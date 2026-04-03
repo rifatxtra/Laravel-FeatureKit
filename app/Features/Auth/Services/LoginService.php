@@ -3,6 +3,7 @@
 namespace App\Features\Auth\Services;
 
 use App\Core\BaseService;
+use App\Features\Auth\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -20,6 +21,10 @@ class LoginService extends BaseService
     {
         if (Auth::attempt($credentials, $remember)) {
             request()->session()->regenerate();
+            User::where('id', Auth::id())->update([
+                'last_login_at' => now(),
+                'last_login_ip' => request()->ip(),
+            ]);
             return true;
         }
 

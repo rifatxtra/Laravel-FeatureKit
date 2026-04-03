@@ -8,27 +8,33 @@ use Illuminate\Support\Str;
 
 class MakeFeatureEventCommand extends Command
 {
-    protected $signature = 'make:feature:event {feature : e.g. Auth or Dashboard/Admin} {name : e.g. UserLoggedIn}';
+    protected $signature = 'make:feature:event {feature : Feature name} {path* : [Role] [Name]}';
     protected $description = 'Create an event inside a feature';
 
     public function handle(): void
     {
         $feature = $this->argument('feature');
-        $name    = Str::studly($this->argument('name'));
+        $path    = $this->argument('path');
 
-        $parts     = array_map(fn($p) => Str::studly($p), explode('/', $feature));
+        // Resolve name and role from path
+        $name = Str::studly(array_pop($path));
+
+        $rolePath  = !empty($path) ? implode('/', $path) : '';
+        $fullPath  = !empty($rolePath) ? "{$feature}/{$rolePath}" : $feature;
+
+        $parts     = array_map(fn($p) => Str::studly($p), explode('/', $fullPath));
         $namespace = 'App\\Features\\' . implode('\\', $parts) . '\\Events';
-        $path      = app_path('Features/' . implode('/', $parts) . "/Events/{$name}.php");
+        $filePath  = app_path('Features/' . implode('/', $parts) . "/Events/{$name}.php");
 
-        if (File::exists($path)) {
+        if (File::exists($filePath)) {
             $this->error("Event [{$name}] already exists!");
             return;
         }
 
-        File::ensureDirectoryExists(dirname($path));
-        File::put($path, $this->stub($namespace, $name));
+        File::ensureDirectoryExists(dirname($filePath));
+        File::put($filePath, $this->stub($namespace, $name));
 
-        $this->info("✅ Event [{$name}] created at app/Features/{$feature}/Events/{$name}.php");
+        $this->info("✅ Event [{$name}] created at app/Features/{$fullPath}/Events/{$name}.php");
     }
 
     private function stub(string $namespace, string $name): string

@@ -7,16 +7,12 @@ import {
     User,
     Menu,
     X,
-    ChevronLeft,
     Home,
     LogOut,
     PanelLeftClose,
     PanelLeftOpen,
     Bell,
-    Shield,
     Key,
-    Database,
-    BarChart3,
     Globe,
     Zap,
     Activity,
@@ -24,18 +20,18 @@ import {
     ShoppingCart,
 } from "lucide-react";
 
-import Modal from "../../../Components/ui/Modal";
 import MainLayout from "../../../Components/Layout/MainLayout";
 
 /**
  * Admin Layout
- *
- * Matches the premium, dynamic design of UserLayout.
- * Darker accents to distinguish from the standard user panel.
+ * 
+ * Matches the premium UI/UX of User portal.
+ * Enhanced sidebar, interactive dropdowns, and standardized typography.
  */
 export default function AdminLayout({ children }) {
     const { url, props } = usePage();
     const user = props.auth?.user;
+    const notifications = props.auth?.notifications ?? [];
 
     // Desktop: false = collapsed (icons only), true = expanded
     const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -55,42 +51,37 @@ export default function AdminLayout({ children }) {
     const navigation = [
         {
             name: "Dashboard",
-            href: route("admin.dashboard"),
+            href: "/admin/dashboard",
             icon: LayoutDashboard,
         },
-        { name: "Users", href: route("admin.users.index"), icon: Users },
+        { name: "Users", href: "/admin/users", icon: Users },
         {
             name: "Settings",
-            href: route("admin.settings.index"),
+            href: "/admin/settings",
             icon: Settings,
         },
-        { name: "SEO", href: route("admin.seo.index"), icon: Globe },
-        { name: "Cache", href: route("admin.cache.index"), icon: Zap },
+        { name: "SEO", href: "/admin/seo", icon: Globe },
+        { name: "Cache", href: "/admin/cache", icon: Zap },
         {
             name: "System Health",
-            href: route("admin.system.health"),
+            href: "/admin/system/health",
             icon: Activity,
         },
         {
             name: "Activity Logs",
-            href: route("admin.activity-logs.index"),
+            href: "/admin/activity-logs",
             icon: History,
         },
-        // Demo Shop (Testing)
         {
             name: "Demo Shop",
-            href: route("payment.demo.index"),
+            href: "/payment/demo",
             icon: ShoppingCart,
         },
     ];
 
     const handleLogout = (e) => {
         e.preventDefault();
-        router.post(route("logout"));
-    };
-
-    const handleMarkAsRead = (id) => {
-        router.post(route("notifications.read", { id }));
+        router.post("/auth/logout");
     };
 
     const toggleMobileSidebar = () =>
@@ -145,7 +136,7 @@ export default function AdminLayout({ children }) {
                                 className={`overflow-hidden transition-opacity duration-300 ${isSidebarExpanded ? "opacity-100" : "opacity-0 w-0"}`}
                             >
                                 <h1 className="font-bold text-lg text-white leading-tight truncate">
-                                    {props.app?.name || "Laravel App"}
+                                    {props.app?.name || "Admin Panel"}
                                 </h1>
                             </div>
                         </div>
@@ -207,7 +198,7 @@ export default function AdminLayout({ children }) {
                         })}
                     </nav>
 
-                    {/* User Profile Section (Mobile Only) */}
+                    {/* Admin Profile Section (Mobile Only) */}
                     <div className="md:hidden mt-auto pt-4 border-t border-white/10">
                         <div className="flex items-center gap-3 px-3 py-3">
                             <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-white/20 shrink-0">
@@ -245,8 +236,8 @@ export default function AdminLayout({ children }) {
 
                 {/* Main Content Area */}
                 <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-                    {/* Top Bar (Mobile Toggle + Back to Website) */}
-                    <header className="shrink-0 h-16 md:h-20 flex items-center justify-between px-6 bg-primary shadow-sm transition-colors duration-300 z-10">
+                    {/* Top Bar */}
+                    <header className="shrink-0 h-16 md:h-20 flex items-center justify-between px-6 bg-primary shadow-sm transition-colors duration-300">
                         <div className="flex items-center">
                             <button
                                 onClick={toggleMobileSidebar}
@@ -263,13 +254,6 @@ export default function AdminLayout({ children }) {
                                 <Home size={16} className="mr-2" />
                                 Back to Website
                             </Link>
-
-                            <div className="hidden md:block h-6 w-[1px] bg-white/20 mx-4"></div>
-
-                            <h2 className="text-white font-semibold text-sm md:text-base truncate">
-                                {navigation.find((n) => url.startsWith(n.href))
-                                    ?.name || "Dashboard"}
-                            </h2>
                         </div>
 
                         {/* Right Side: Notifications & Profile */}
@@ -287,7 +271,7 @@ export default function AdminLayout({ children }) {
                                 >
                                     <Bell size={25} />
                                     {user?.unread_notifications_count > 0 && (
-                                        <span className="absolute top-2 right-2 h-2.5 w-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                                        <span className="absolute top-2 right-0 md:right-2 h-2.5 w-2.5 bg-red-500 rounded-full border-2 border-white"></span>
                                     )}
                                 </button>
 
@@ -317,13 +301,11 @@ export default function AdminLayout({ children }) {
                                                                 |
                                                             </span>
                                                             <button
-                                                                onClick={() =>
+                                                                onClick={() => {
                                                                     router.post(
-                                                                        route(
-                                                                            "notifications.read-all",
-                                                                        ),
-                                                                    )
-                                                                }
+                                                                        "/admin/notification/read-all",
+                                                                    );
+                                                                }}
                                                                 className="text-[10px] font-bold text-primary hover:underline uppercase tracking-tight"
                                                             >
                                                                 Mark all read
@@ -334,34 +316,23 @@ export default function AdminLayout({ children }) {
                                             </div>
 
                                             <div className="max-h-[300px] overflow-y-auto">
-                                                {props.auth.notifications &&
-                                                props.auth.notifications
-                                                    .length > 0 ? (
-                                                    props.auth.notifications.map(
+                                                {notifications &&
+                                                notifications.length > 0 ? (
+                                                    notifications.map(
                                                         (notification) => (
                                                             <Link
+                                                                href={`/admin/notification/${notification.id}`}
                                                                 key={
                                                                     notification.id
                                                                 }
-                                                                href={route(
-                                                                    "notifications.show",
-                                                                    {
-                                                                        id: notification.id,
-                                                                    },
-                                                                )}
-                                                                className={`block px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors cursor-pointer ${notification.is_read ? "opacity-60" : "bg-blue-50/30"}`}
+                                                                className={`block px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors cursor-pointer ${notification.read_at ? "opacity-60" : "bg-blue-50/30"}`}
                                                             >
                                                                 <p
-                                                                    className={`text-xs sm:text-sm truncate ${notification.is_read ? "text-gray-500 font-normal" : "text-gray-900 font-semibold"}`}
+                                                                    className={`text-xs sm:text-sm flex justify-between items-center ${notification.read_at ? "text-gray-500 font-normal" : "text-gray-900 font-semibold"}`}
                                                                 >
-                                                                    {notification.title ||
-                                                                        "New Notification"}
-                                                                </p>
-                                                                <p className="text-[10px] sm:text-xs text-gray-400 mt-1 flex items-center justify-between gap-2">
-                                                                    <span className="truncate flex-1">
-                                                                        {notification.description ||
-                                                                            "No details"}
-                                                                    </span>
+                                                                    {
+                                                                        notification.title
+                                                                    }
                                                                     <span className="text-[9px] sm:text-xs shrink-0">
                                                                         {new Date(
                                                                             notification.created_at,
@@ -382,19 +353,14 @@ export default function AdminLayout({ children }) {
                                                 )}
                                             </div>
 
-                                            {user?.unread_notifications_count >
-                                                0 && (
-                                                <div className="p-2 border-t border-gray-50 text-center">
-                                                    <Link
-                                                        href={route(
-                                                            "notifications.index",
-                                                        )}
-                                                        className="text-xs font-semibold text-primary hover:underline"
-                                                    >
-                                                        View All
-                                                    </Link>
-                                                </div>
-                                            )}
+                                            <div className="p-2 border-t border-gray-50 text-center">
+                                                <Link
+                                                    href="/admin/notification"
+                                                    className="text-xs font-semibold text-primary hover:underline"
+                                                >
+                                                    View All
+                                                </Link>
+                                            </div>
                                         </div>
                                     </>
                                 )}
@@ -406,7 +372,7 @@ export default function AdminLayout({ children }) {
                                     onClick={() =>
                                         setIsProfileOpen(!isProfileOpen)
                                     }
-                                    className="h-10 w-10 rounded-full overflow-hidden border-2 border-white shadow-sm focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
+                                    className="h-10 w-10 rounded-full overflow-hidden border-2 border-white/20 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
                                 >
                                     <img
                                         src={
@@ -433,35 +399,33 @@ export default function AdminLayout({ children }) {
                                         />
                                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-40 animate-fadeIn">
                                             <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                                                <p className="text-sm font-semibold text-gray-900 truncate">
+                                                <h3 className="text-sm sm:text-base font-bold text-gray-900 truncate">
                                                     {user?.name}
-                                                </p>
+                                                </h3>
                                                 <p className="text-xs text-gray-500 truncate">
                                                     {user?.email}
                                                 </p>
                                             </div>
 
                                             <Link
-                                                href={route("profile.edit")}
+                                                href="#"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
                                             >
                                                 <User
                                                     size={16}
                                                     className="mr-2"
                                                 />
-                                                Profile Settings
+                                                Admin Profile
                                             </Link>
                                             <Link
-                                                href={route(
-                                                    "profile.password.edit",
-                                                )}
+                                                href="#"
                                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
                                             >
-                                                <Key
+                                                <Settings
                                                     size={16}
                                                     className="mr-2"
                                                 />
-                                                Change Password
+                                                Global Settings
                                             </Link>
 
                                             <div className="border-t border-gray-50 mt-1 pt-1">
@@ -473,7 +437,7 @@ export default function AdminLayout({ children }) {
                                                         size={16}
                                                         className="mr-2"
                                                     />
-                                                    Sign Out
+                                                    Logout
                                                 </button>
                                             </div>
                                         </div>
@@ -484,7 +448,7 @@ export default function AdminLayout({ children }) {
                     </header>
 
                     {/* Page Scroll Area */}
-                    <main className="flex-1 overflow-auto px-6 py-8">
+                    <main className="flex-1 overflow-auto px-6 pb-8">
                         {children}
                     </main>
                 </div>

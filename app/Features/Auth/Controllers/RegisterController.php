@@ -24,6 +24,8 @@ class RegisterController extends BaseController
     {
         $this->registerService->register($request->validated());
 
-        return redirect()->intended(route('home.index'));
+        return inertia('(portals)/user/dashboard/page', [
+            'title'       => 'User Dashboard',
+        ]);
     }
 }

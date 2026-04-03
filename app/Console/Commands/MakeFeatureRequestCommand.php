@@ -8,28 +8,34 @@ use Illuminate\Support\Str;
 
 class MakeFeatureRequestCommand extends Command
 {
-    protected $signature = 'make:feature:request {feature : e.g. Auth or Dashboard/Admin} {name : e.g. LoginRequest}';
+    protected $signature = 'make:feature:request {feature : Feature name} {path* : [Role] [Name] (Name defaults to Request)}';
     protected $description = 'Create a form request inside a feature';
 
     public function handle(): void
     {
         $feature = $this->argument('feature');
-        $name    = Str::studly($this->argument('name'));
-        $name    = Str::endsWith($name, 'Request') ? $name : $name . 'Request';
+        $path    = $this->argument('path');
 
-        $parts     = array_map(fn($p) => Str::studly($p), explode('/', $feature));
+        // Resolve name and role from path
+        $name = Str::studly(array_pop($path));
+        $name = Str::endsWith($name, 'Request') ? $name : $name . 'Request';
+
+        $rolePath  = !empty($path) ? implode('/', $path) : '';
+        $fullPath  = !empty($rolePath) ? "{$feature}/{$rolePath}" : $feature;
+
+        $parts     = array_map(fn($p) => Str::studly($p), explode('/', $fullPath));
         $namespace = 'App\\Features\\' . implode('\\', $parts) . '\\Requests';
-        $path      = app_path('Features/' . implode('/', $parts) . "/Requests/{$name}.php");
+        $filePath  = app_path('Features/' . implode('/', $parts) . "/Requests/{$name}.php");
 
-        if (File::exists($path)) {
+        if (File::exists($filePath)) {
             $this->error("Request [{$name}] already exists!");
             return;
         }
 
-        File::ensureDirectoryExists(dirname($path));
-        File::put($path, $this->stub($namespace, $name));
+        File::ensureDirectoryExists(dirname($filePath));
+        File::put($filePath, $this->stub($namespace, $name));
 
-        $this->info("✅ Request [{$name}] created at app/Features/{$feature}/Requests/{$name}.php");
+        $this->info("✅ Request [{$name}] created at app/Features/{$fullPath}/Requests/{$name}.php");
     }
 
     private function stub(string $namespace, string $name): string

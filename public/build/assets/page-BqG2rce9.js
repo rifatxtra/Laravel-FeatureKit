@@ -1,0 +1,1 @@
+import{a as e,t}from"./app-DOPihLrS.js";import n from"./layout-6zOdDOMZ.js";e();var r=t();function i(){return(0,r.jsx)(n,{children:(0,r.jsx)(`h1`,{children:`Dashboard`})})}export{i as default};

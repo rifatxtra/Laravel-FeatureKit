@@ -5,6 +5,8 @@ namespace App\Features\Auth\Controllers;
 use App\Core\BaseController;
 use App\Features\Auth\Requests\LoginRequest;
 use App\Features\Auth\Services\LoginService;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class LoginController extends BaseController
 {
@@ -14,6 +16,13 @@ class LoginController extends BaseController
 
     public function index()
     {
+        if (Auth::check()) {
+            $role = Auth::user()->role;
+            if ($role === 'admin') {
+                return inertia('(portals)/admin/dashboard/page');
+            }
+            return inertia('(portals)/user/dashboard/page');
+        }
         return view('pages.auth.login.page', [
             'app_name' => config('app.name'),
             'app_description' => config('app.description'),
@@ -33,6 +42,21 @@ class LoginController extends BaseController
             $request->boolean('remember')
         );
 
-        return redirect()->intended(route('home.index'));
+        $user = Auth::user();
+
+        if ($user->role === 'admin') {
+            return inertia('(portals)/admin/dashboard/page');
+        }
+
+        return inertia('(portals)/user/dashboard/page');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return Inertia::location(route('login'));
     }
 }

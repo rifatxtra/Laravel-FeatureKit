@@ -326,10 +326,10 @@ User request received
         ▼
 Is it a NEW FEATURE?
   YES → Run: php artisan make:feature {Name}
-        or:  php artisan make:feature {Name} --roles=Admin,User
+        or:  php artisan make:feature {Name} {RoleA} {RoleB}
         │
         ▼
-  Need specific file? Use: make:feature:{type} {Feature} {Name}
+  Need specific file? Use: php artisan make:feature:{type} {Feature} {Role?} {Name}
         │
         ▼
 Is the page public or portal?

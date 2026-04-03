@@ -109,7 +109,7 @@
 <div class="pt-6 text-center border-t border-border mt-6">
     <p class="text-surface-muted-foreground font-semibold">
         Already have an account?
-        <a href="{{ route('auth.login.index') }}" class="text-primary font-bold hover:underline">
+        <a href="{{ route('login') }}" class="text-primary font-bold hover:underline">
             Sign In
         </a>
     </p>

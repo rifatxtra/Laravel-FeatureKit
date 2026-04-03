@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class MakeFeatureCommand extends Command
 {
-    protected $signature = 'make:feature {name : Feature name e.g. Auth} {--roles= : Comma separated roles e.g. Admin,User}';
+    protected $signature = 'make:feature {name : Feature name e.g. Auth} {roles?* : Optional roles e.g. Admin User} {--roles= : Comma separated roles e.g. Admin,User}';
 
     protected $description = 'Create a new feature with full folder structure and .gitkeep files';
 
@@ -27,6 +27,12 @@ class MakeFeatureCommand extends Command
     {
         $name  = Str::studly($this->argument('name'));
         $roles = $this->option('roles');
+        $roleArgs = $this->argument('roles');
+
+        // If roles option is not provided, use roles from arguments
+        if (!$roles && !empty($roleArgs)) {
+            $roles = implode(',', $roleArgs);
+        }
 
         if ($roles) {
             $this->createRoleBasedFeature($name, $roles);

@@ -1,0 +1,143 @@
+{
+  "_MainLayout-s-qQd7jt.js": {
+    "file": "assets/MainLayout-s-qQd7jt.js",
+    "name": "MainLayout",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_Pagination-BrtGj0Pz.js": {
+    "file": "assets/Pagination-BrtGj0Pz.js",
+    "name": "Pagination",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_x-CdfcZO40.js": {
+    "file": "assets/x-CdfcZO40.js",
+    "name": "x",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-CZY_xZOz.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.jsx": {
+    "file": "assets/app-DOPihLrS.js",
+    "name": "app",
+    "src": "resources/js/app.jsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/pages/(portals)/admin/dashboard/page.jsx",
+      "resources/js/pages/(portals)/admin/layout.jsx",
+      "resources/js/pages/(portals)/admin/notification/[id]/page.jsx",
+      "resources/js/pages/(portals)/admin/notification/page.jsx",
+      "resources/js/pages/(portals)/layout.jsx",
+      "resources/js/pages/(portals)/user/dashboard/page.jsx",
+      "resources/js/pages/(portals)/user/layout.jsx",
+      "resources/js/pages/(portals)/user/notification/[id]/page.jsx",
+      "resources/js/pages/(portals)/user/notification/page.jsx",
+      "_MainLayout-s-qQd7jt.js"
+    ],
+    "css": [
+      "assets/app-CZY_xZOz.css"
+    ]
+  },
+  "resources/js/pages/(portals)/admin/dashboard/page.jsx": {
+    "file": "assets/page-BqG2rce9.js",
+    "name": "page",
+    "src": "resources/js/pages/(portals)/admin/dashboard/page.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "resources/js/pages/(portals)/admin/layout.jsx"
+    ]
+  },
+  "resources/js/pages/(portals)/admin/layout.jsx": {
+    "file": "assets/layout-6zOdDOMZ.js",
+    "name": "layout",
+    "src": "resources/js/pages/(portals)/admin/layout.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_x-CdfcZO40.js",
+      "_MainLayout-s-qQd7jt.js"
+    ]
+  },
+  "resources/js/pages/(portals)/admin/notification/[id]/page.jsx": {
+    "file": "assets/page-5Lu7-p2I.js",
+    "name": "page",
+    "src": "resources/js/pages/(portals)/admin/notification/[id]/page.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "resources/js/pages/(portals)/admin/layout.jsx"
+    ]
+  },
+  "resources/js/pages/(portals)/admin/notification/page.jsx": {
+    "file": "assets/page-CeOL4ZNt.js",
+    "name": "page",
+    "src": "resources/js/pages/(portals)/admin/notification/page.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "resources/js/pages/(portals)/admin/layout.jsx",
+      "_Pagination-BrtGj0Pz.js"
+    ]
+  },
+  "resources/js/pages/(portals)/layout.jsx": {
+    "file": "assets/layout-D5-YhTZP.js",
+    "name": "layout",
+    "src": "resources/js/pages/(portals)/layout.jsx",
+    "isDynamicEntry": true
+  },
+  "resources/js/pages/(portals)/user/dashboard/page.jsx": {
+    "file": "assets/page-BjsJ2_Jf.js",
+    "name": "page",
+    "src": "resources/js/pages/(portals)/user/dashboard/page.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "resources/js/pages/(portals)/user/layout.jsx"
+    ]
+  },
+  "resources/js/pages/(portals)/user/layout.jsx": {
+    "file": "assets/layout-Dkmp91cv.js",
+    "name": "layout",
+    "src": "resources/js/pages/(portals)/user/layout.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_x-CdfcZO40.js",
+      "_MainLayout-s-qQd7jt.js"
+    ]
+  },
+  "resources/js/pages/(portals)/user/notification/[id]/page.jsx": {
+    "file": "assets/page-DL5a7HZj.js",
+    "name": "page",
+    "src": "resources/js/pages/(portals)/user/notification/[id]/page.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "resources/js/pages/(portals)/user/layout.jsx"
+    ]
+  },
+  "resources/js/pages/(portals)/user/notification/page.jsx": {
+    "file": "assets/page-B56h6CSj.js",
+    "name": "page",
+    "src": "resources/js/pages/(portals)/user/notification/page.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "resources/js/pages/(portals)/user/layout.jsx",
+      "_Pagination-BrtGj0Pz.js"
+    ]
+  }
+}

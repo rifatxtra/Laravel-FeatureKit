@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     // frontend
-    Route::get('/login', [LoginController::class, 'index'])->name('auth.login.index'); // login page
+    Route::get('/login', [LoginController::class, 'index'])->name('login'); // login page
     Route::get('/register', [RegisterController::class, 'index'])->name('auth.register.index');
     Route::get('forgot-password', [ForgotPasswordController::class, 'index'])->name('auth.forgot-password.index');
     Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
@@ -17,4 +17,5 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [RegisterController::class, 'register'])->name('auth.register.register');
     Route::post('/forgot-password', [ForgotPasswordController::class, 'send'])->name('auth.forgot-password.send');
     Route::post('reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

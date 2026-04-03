@@ -1,4 +1,4 @@
-# 📦 rifatxtra/laravel-featurekit (v2.0.0)
+# 📦 rifatxtra/laravel-featurekit (v2.1.0)
 
 ### Professional Laravel 12 Feature-Driven Starter Kit.
 
@@ -13,7 +13,7 @@ Built for developers who want to skip the "boring" setup and start building prod
 - **🛡️ Intelligent Layouts**: Automatic persistent layout injection (MainLayout) for all dashboard pages — zero configuration required.
 - **📬 Universal Mail System**: A single queued `GeneralMail` class with a professional Markdown master template handles every email in your app.
 - **🧰 11-Module JS Utility Suite**: Image Compression, Toast, Storage, Clipboard, Date, Number/Currency, String, Validation, Performance (debounce/throttle), and Web Vitals monitoring.
-- **🏗️ 7 Custom Artisan Commands**: Generate entire features, controllers, services, requests, events, observers, and exceptions — all wired to the Feature-Driven Architecture.
+- **🏗️ 7 Custom Artisan Commands**: Generate entire features, controllers, services, requests, events, observers, and exceptions with flexible positional arguments (e.g., `make:feature Auth` or `make:feature Dashboard Admin`).
 - **🎨 Tailwind CSS v4**: Semantic `@theme` design tokens (primary, secondary, surface, error, success) with OKLCH color space for accessible, white-label–ready theming.
 - **🔐 Complete Auth System**: Login, Register, Forgot Password, and Reset Password — fully coded with Blade views, form requests, and service-layer logic.
 - **🎯 Pre-Built UI Kit**: React components for Toast, Modal, LoadingSpinner, Pagination, SeoHead, BasicEditor (TipTap), and 5 PromoTemplate variants.
@@ -88,17 +88,17 @@ composer dev      # starts server + queue + logs + vite concurrently
 
 ## 🛠️ Tech Stack
 
-| Layer        | Technology                                | Version |
-| :----------- | :---------------------------------------- | :------ |
-| **Backend**  | Laravel Framework                         | 12.x    |
-| **Frontend** | React                                     | 19.x    |
-| **Bridge**   | Inertia.js                                | 3.x     |
-| **Styling**  | Tailwind CSS                              | 4.x     |
-| **Build**    | Vite                                      | 8.x     |
-| **PHP**      | PHP                                       | 8.2+    |
-| **Database** | SQLite (default), MySQL, PostgreSQL       | —       |
-| **Queue**    | Database driver (default)                 | —       |
-| **Testing**  | PHPUnit                                   | 11.x   |
+| Layer        | Technology                          | Version |
+| :----------- | :---------------------------------- | :------ |
+| **Backend**  | Laravel Framework                   | 12.x    |
+| **Frontend** | React                               | 19.x    |
+| **Bridge**   | Inertia.js                          | 3.x     |
+| **Styling**  | Tailwind CSS                        | 4.x     |
+| **Build**    | Vite                                | 8.x     |
+| **PHP**      | PHP                                 | 8.2+    |
+| **Database** | SQLite (default), MySQL, PostgreSQL | —       |
+| **Queue**    | Database driver (default)           | —       |
+| **Testing**  | PHPUnit                             | 11.x    |
 
 ---
 

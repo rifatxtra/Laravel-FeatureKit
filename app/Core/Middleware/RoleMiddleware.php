@@ -25,7 +25,7 @@ class RoleMiddleware
         $user = $request->user();
 
         if (! $user) {
-            return redirect()->route('auth.login.index');
+            return redirect()->route('login');
         }
 
         // Collect the user's roles into a flat array of strings
