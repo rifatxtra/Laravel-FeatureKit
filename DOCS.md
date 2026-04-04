@@ -1,6 +1,6 @@
-# 🚀 Laravel FeatureKit v2.1.1 — Complete Technical Documentation
+# 🚀 Laravel Feature Kit v2.1.1 — Complete Technical Documentation
 
-Welcome to the definitive guide for **rifatxtra/laravel-featurekit**. This document covers every system, pattern, utility, and command in the project — no detail omitted.
+Welcome to the definitive guide for **Laravel Feature Kit (rifatxtra/laravel-feature-kit)**. This document covers every system, pattern, utility, and command in the project — no detail omitted.
 
 ---
 
@@ -31,7 +31,7 @@ Welcome to the definitive guide for **rifatxtra/laravel-featurekit**. This docum
 
 ## 🏛️ 1. Architecture: Feature-Driven Design (FDD)
 
-Traditional Laravel projects scatter logic across `app/Http/Controllers`, `app/Models`, `app/Services`, etc. As the project grows, finding related files becomes a nightmare. FeatureKit solves this with **Feature-Driven Design**.
+Traditional Laravel projects scatter logic across `app/Http/Controllers`, `app/Models`, `app/Services`, etc. As the project grows, finding related files becomes a nightmare. Feature Kit solves this with **Feature-Driven Design**.
 
 ### How It Works
 
@@ -312,7 +312,7 @@ The bootstrap file includes a prepared middleware hook:
 
 ## ⚛️ 4. Frontend: Hybrid Strategy
 
-FeatureKit uses a **dual rendering strategy** for optimal performance and interactivity.
+Feature Kit uses a **dual rendering strategy** for optimal performance and interactivity.
 
 ### SEO Layer (Blade + Tailwind v4)
 
@@ -325,7 +325,7 @@ Used for: **Landing page, Documentation page, Features page, Auth forms.**
 ```blade
 @extends('pages.layout')
 
-@section('title', 'Welcome to FeatureKit')
+@section('title', 'Welcome to Feature Kit')
 
 @section('content')
     <div class="bg-surface text-foreground p-8 rounded-lg shadow-sm">
@@ -774,7 +774,7 @@ if (import.meta.env.PROD) {
 
 ## 📬 9. Modern Mailing System
 
-Stop writing repetitive mailable classes. FeatureKit provides a **Universal Mailable Engine**.
+Stop writing repetitive mailable classes. Feature Kit provides a **Universal Mailable Engine**.
 
 ### `GeneralMail.php`
 
@@ -832,7 +832,7 @@ Every email rendered via `GeneralMail` automatically wraps in a professional Mar
 
 ## 🔐 10. Auth Feature (Reference Implementation)
 
-The Auth feature is a **complete, working implementation** demonstrating all FeatureKit patterns.
+The Auth feature is a **complete, working implementation** demonstrating all Feature Kit patterns.
 
 ### Controllers
 
@@ -914,7 +914,7 @@ POST   /auth/reset-password    → ForgotPasswordController@reset(password.updat
 
 **Features (`features.blade.php`):**
 
-- Side-by-side comparison: Traditional Laravel (❌) vs FeatureKit Design (✅).
+- Side-by-side comparison: Traditional Laravel (❌) vs Feature Kit Design (✅).
 - Animated code preview showing folder structure.
 - 3-pillar grid: Isolation, DX First, Reliability.
 
@@ -1200,7 +1200,7 @@ Mail::to($user)->queue(new GeneralMail(
 
 ## 🔔 18. Unified Notification System
 
-FeatureKit uses a **Event-Driven Unified Notification System** that decouple features from the notification logic.
+Feature Kit uses a **Event-Driven Unified Notification System** that decouple features from the notification logic.
 
 ### `NotificationCreated` Event
 
@@ -1247,12 +1247,12 @@ php artisan make:feature:event {FeatureName} {EventName}
 ## 🏗️ 19. Advanced Feature Patterns
 
 ### Independent User Models
-For complex role-based systems, FeatureKit recommends using **Feature-Specific User Models** (e.g., `App\Features\Profile\Admin\Models\User`). 
+For complex role-based systems, Feature Kit recommends using **Feature-Specific User Models** (e.g., `App\Features\Profile\Admin\Models\User`). 
 - **Decoupling**: Prevents the core `App\Models\User` from becoming a "God Class".
 - **Specialization**: Allows adding role-specific scopes, accessors, and relationships without cluttering other parts of the app.
 
 ### Secure Private Storage & Modular Delivery
-FeatureKit implements a secure pattern for sensitive files like profile images:
+Feature Kit implements a secure pattern for sensitive files like profile images:
 1. **Private Storage**: Files are stored in `storage/app/private/` (not publicly accessible via URL).
 2. **Modular Controller**: A dedicated `ProfileImageController` within the `Profile` feature serves these images.
 3. **Role-Aware Routing**: Secure routes (e.g., `/admin/profile-image`) are defined within the feature's `web.php`, ensuring users can only access their own files or authorized assets.
@@ -1261,7 +1261,7 @@ FeatureKit implements a secure pattern for sensitive files like profile images:
 
 ## 📈 19. Activity Logs System
 
-FeatureKit provides a highly extensible, **Event-Driven Activity Logging System** that captures and stores user interactions automatically.
+Feature Kit provides a highly extensible, **Event-Driven Activity Logging System** that captures and stores user interactions automatically.
 
 ### The `ActivityLogged` Event & `CreateActivityLogRecord` Listener
 
@@ -1306,7 +1306,7 @@ If no keyword matches, it gracefully transforms the action name (e.g., `invoice_
 
 ## 🏛️ 20. Core Administrative Hubs
 
-FeatureKit provides 4 scaffolded administration points, carefully isolated into feature domains and powered by thin-controller, thick-service architectures. Each hub perfectly illustrates how to execute complex logic without polluting controllers.
+Feature Kit provides 4 scaffolded administration points, carefully isolated into feature domains and powered by thin-controller, thick-service architectures. Each hub perfectly illustrates how to execute complex logic without polluting controllers.
 
 ### 👥 1. User Management (`App\Features\UserManagement`)
 A comprehensive control center replacing basic scaffolding, wired to a dedicated `UserService`.

@@ -1,7 +1,11 @@
 @extends('pages.layout')
 
 @section('title', 'Features - Laravel Feature Kit')
-@section('description', 'Discover every feature in Laravel FeatureKit v2.1.1. Feature-Driven Architecture, React 19, 20+ hooks, 11 utilities, 7 Artisan commands, and more.')
+@section('description', 'Discover every feature in Laravel Feature Kit v2.1.1. Feature-Driven Architecture, React 19, 20+ hooks, 11 utilities, 7 Artisan commands, and more.')
+@section('keywords', 'Laravel Features, Feature-Driven Architecture, React 19, Inertia.js, Laravel Utilities, SaaS Features')
+@section('og_title', 'Features - Laravel Feature Kit')
+@section('og_description', 'Explore the powerful feature-driven architecture and pre-built systems of Laravel Feature Kit.')
+@section('og_url', 'https://featurekit.rifatxtra.com/features')
 
 @section('content')
 <div class="bg-base py-20">
@@ -9,7 +13,7 @@
         {{-- Header --}}
         <div class="text-center mb-16">
             <h1 class="text-4xl font-extrabold text-foreground sm:text-5xl md:text-6xl mb-6">
-                Why choose <span class="text-primary">FeatureKit?</span>
+                Why choose <span class="text-primary">Laravel Feature Kit?</span>
             </h1>
             <p class="max-w-3xl mx-auto text-xl text-surface-foreground/60">
                 A complete comparison showing how we solve the scaling, organization, and developer experience problems inherent in traditional Laravel architectures.
@@ -45,7 +49,7 @@
                     </ul>
                 </div>
                 <div class="p-8 bg-primary/5 rounded-3xl border border-primary/20 shadow-lg">
-                    <h3 class="text-2xl font-bold text-primary mb-4">FeatureKit Design</h3>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Laravel Feature Kit Design</h3>
                     <ul class="space-y-4">
                         <li class="flex items-center text-foreground font-medium">
                             <svg class="h-5 w-5 text-green-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -114,7 +118,7 @@
         <div class="text-center mb-12">
             <h2 class="text-3xl font-extrabold text-foreground sm:text-4xl mb-4">Everything Included</h2>
             <p class="max-w-2xl mx-auto text-lg text-surface-foreground/60">
-                A deep look at every system that ships with FeatureKit v2.1.1.
+                A deep look at every system that ships with Feature Kit v2.1.1.
             </p>
         </div>
 
@@ -309,7 +313,7 @@
 
         {{-- Stats --}}
         <div class="bg-primary/5 rounded-3xl border border-primary/20 p-12 mb-24">
-            <h2 class="text-2xl font-extrabold text-foreground text-center mb-10">FeatureKit by the Numbers</h2>
+            <h2 class="text-2xl font-extrabold text-foreground text-center mb-10">Laravel Feature Kit by the Numbers</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
                     <div class="text-4xl font-black text-primary">7</div>

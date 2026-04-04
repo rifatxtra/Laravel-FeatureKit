@@ -2,6 +2,12 @@
 
 @section('title', 'Laravel Feature Kit - Professional Feature-Driven Starter Kit')
 @section('description', 'Build production-grade Laravel 12 applications with Feature-Driven Architecture, React 19, Inertia.js v2, Tailwind CSS v4, and 40+ built-in utilities.')
+@section('keywords', 'Laravel Starter Kit, Feature-Driven Design, React 19, Inertia.js, SaaS Boilerplate, Laravel 12 Package, PHP, framework')
+@section('og_title', 'Laravel Feature Kit - The Ultimate Feature-Driven Starter Kit')
+@section('og_description', 'Build production-grade Laravel 12 apps instantly. Feature-driven architecture, React 19, Inertia.js v2, and premium pre-built utilities.')
+@section('og_url', 'https://featurekit.rifatxtra.com/')
+@section('twitter_site', '@rifatxtra')
+@section('twitter_creator', '@rifatxtra')
 
 @section('content')
     <!-- Hero Section -->
@@ -32,7 +38,7 @@
                             </div>
                         </div>
                         <div class="mt-6">
-                            <pre class="inline-block bg-surface-muted px-4 py-2 rounded-lg text-sm text-surface-muted-foreground font-mono border border-surface-foreground/10"><code>composer create-project rifatxtra/laravel-featurekit my-app</code></pre>
+                            <pre class="inline-block bg-surface-muted px-4 py-2 rounded-lg text-sm text-surface-muted-foreground font-mono border border-surface-foreground/10"><code>composer create-project rifatxtra/laravel-feature-kit my-app</code></pre>
                         </div>
                     </div>
                 </main>
@@ -169,7 +175,7 @@
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl font-extrabold text-foreground mb-4">Get Started in Seconds</h2>
             <p class="text-lg text-surface-foreground/60 mb-8">One command to install. One command to run. That's it.</p>
-            <pre class="bg-base p-6 rounded-2xl border border-surface-foreground/10 text-left text-primary overflow-x-auto shadow-inner text-sm"><code>composer create-project rifatxtra/laravel-featurekit my-app
+            <pre class="bg-base p-6 rounded-2xl border border-surface-foreground/10 text-left text-primary overflow-x-auto shadow-inner text-sm"><code>composer create-project rifatxtra/laravel-feature-kit my-app
 cd my-app
 composer setup    <span class="text-surface-foreground/30"># deps + .env + key + migrate + build</span>
 composer dev      <span class="text-surface-foreground/30"># server + queue + logs + vite (all at once)</span></code></pre>

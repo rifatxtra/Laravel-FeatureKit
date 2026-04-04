@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "rifatxtra/laravel-featurekit",
+    "name": "rifatxtra/laravel-feature-kit",
     "version": "v2.1.1",
     "type": "project",
-    "description": "Feature Kit - Professional Laravel 12 Feature-Driven Starter Kit with Inertia.js v2, React 19, and Tailwind CSS v4.",
+    "description": "The professional Laravel 12 Feature-Driven Starter Kit (Laravel Feature Kit) with Inertia.js v2, React 19, and Tailwind CSS v4.",
     "keywords": [
         "laravel",
         "laravel-12",
@@ -13,8 +13,12 @@
         "feature-driven",
         "architecture",
         "laravel starter-kit",
-        "laravel feature kit",
-        "feature kit"
+        "laravel-feature-kit",
+        "feature-kit",
+        "feature kit",
+        "boilerplate",
+        "saas",
+        "starter-kit"
     ],
     "license": "MIT",
     "authors": [

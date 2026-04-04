@@ -1,6 +1,6 @@
-# 📦 rifatxtra/laravel-featurekit (v2.1.1)
+# 📦 rifatxtra/laravel-feature-kit (v2.1.1)
 
-### Professional Laravel 12 Feature-Driven Starter Kit.
+### The Professional Laravel 12 Feature-Driven Starter Kit (Laravel Feature Kit).
 
 Built for developers who want to skip the "boring" setup and start building production-grade applications from day one.
 
@@ -27,7 +27,7 @@ Built for developers who want to skip the "boring" setup and start building prod
 ## ⚡ Quick Start
 
 ```bash
-composer create-project rifatxtra/laravel-featurekit my-app
+composer create-project rifatxtra/laravel-feature-kit my-app
 cd my-app
 composer setup    # installs deps, copies .env, generates key, migrates DB, builds assets
 composer dev      # starts server + queue + logs + vite concurrently
@@ -102,11 +102,8 @@ composer dev      # starts server + queue + logs + vite concurrently
 
 ---
 
-## 📖 Documentation & Guides
-
-For detailed code examples, architectural deep-dives, every utility API, and all Artisan commands:
-
-👉 **[DOCS.md](DOCS.md)**
+### Professional Laravel 12 Feature-Driven Starter Kit (Feature Kit).
+Everything you need to know about setting up and building with the Feature Kit. From architecture to utilities, commands, and best practices.
 
 ---
 
