@@ -22,6 +22,8 @@ Welcome to the definitive guide for **rifatxtra/laravel-featurekit**. This docum
 14. [Dev Environment & Scripts](#-14-dev-environment--scripts)
 15. [Database & Migrations](#-15-database--migrations)
 16. [Quick Reference Table](#-16-quick-reference-table)
+17. [Unified Notification System](#-17-unified-notification-system)
+18. [Advanced Feature Patterns (Independent Models & Private Storage)](#-18-advanced-feature-patterns)
 
 ---
 
@@ -1146,7 +1148,59 @@ updated_at      TIMESTAMP
 | **Custom Hooks**    | 20+ Inertia accessor hooks                                         | `resources/js/Hooks/useInertia.js`        |
 | **JS Utilities**    | 11 utility modules                                                 | `resources/js/Utils/`                     |
 | **Design Tokens**   | Tailwind v4 @theme                                                 | `resources/css/app.css`                   |
-| **CLI Scaffolding** | 7 make:feature:\* commands                                         | `app/Console/Commands/`                   |
+| **CLI Scaffolding** | 7 make:feature:* commands                                         | `app/Console/Commands/`                   |
+
+---
+
+## 🔔 17. Unified Notification System
+
+FeatureKit uses a **Event-Driven Unified Notification System** that decouple features from the notification logic.
+
+### `NotificationCreated` Event
+
+A single, global event (`App\Features\Notification\Events\NotificationCreated`) is used to trigger notifications across the entire application.
+
+```php
+use App\Features\Notification\Events\NotificationCreated;
+
+// Dispatch from any Service or Controller
+event(new NotificationCreated(
+    user: $user, 
+    category: 'Security', 
+    title: 'Password Changed', 
+    message: 'Your account password has been updated.'
+));
+```
+
+### `CreateNotificationRecord` Listener
+
+The listener (`App\Features\Notification\Listeners\CreateNotificationRecord`) is automatically registered in `AppServiceProvider`. It handles:
+- **Queueing**: Implements `ShouldQueue` to run in the background.
+- **Role Detection**: Automatically routes notifications to `AdminNotification` or `UserNotification` tables based on the user's role.
+
+### Creating New Feature Events
+
+To create a new event for a specific feature, use the scaffolder:
+```bash
+php artisan make:feature:event {FeatureName} {EventName}
+```
+
+---
+
+## 🏗️ 18. Advanced Feature Patterns
+
+### Independent User Models
+For complex role-based systems, FeatureKit recommends using **Feature-Specific User Models** (e.g., `App\Features\Profile\Admin\Models\User`). 
+- **Decoupling**: Prevents the core `App\Models\User` from becoming a "God Class".
+- **Specialization**: Allows adding role-specific scopes, accessors, and relationships without cluttering other parts of the app.
+
+### Secure Private Storage & Modular Delivery
+FeatureKit implements a secure pattern for sensitive files like profile images:
+1. **Private Storage**: Files are stored in `storage/app/private/` (not publicly accessible via URL).
+2. **Modular Controller**: A dedicated `ProfileImageController` within the `Profile` feature serves these images.
+3. **Role-Aware Routing**: Secure routes (e.g., `/admin/profile-image`) are defined within the feature's `web.php`, ensuring users can only access their own files or authorized assets.
+
+---
 
 ---
 

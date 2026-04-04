@@ -3,21 +3,32 @@
 namespace App\Features\Landing\Controllers;
 
 use App\Core\BaseController;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class LandingController extends BaseController
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->header('X-Inertia')) {
+            return Inertia::location('/');
+        }
         return view('pages.home.page');
     }
 
-    public function docs()
+    public function docs(Request $request)
     {
+        if ($request->header('X-Inertia')) {
+            return Inertia::location(route('landing.docs'));
+        }
         return view('pages.home.docs');
     }
 
-    public function features()
+    public function features(Request $request)
     {
+        if ($request->header('X-Inertia')) {
+            return Inertia::location(route('landing.features'));
+        }
         return view('pages.home.features');
     }
 }

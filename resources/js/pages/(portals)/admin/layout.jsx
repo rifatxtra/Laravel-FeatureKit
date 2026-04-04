@@ -24,7 +24,7 @@ import MainLayout from "../../../Components/Layout/MainLayout";
 
 /**
  * Admin Layout
- * 
+ *
  * Matches the premium UI/UX of User portal.
  * Enhanced sidebar, interactive dropdowns, and standardized typography.
  */
@@ -248,7 +248,10 @@ export default function AdminLayout({ children }) {
 
                             {/* Back to Website Link */}
                             <Link
-                                href="/"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    router.visit("/");
+                                }}
                                 className="hidden md:flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors"
                             >
                                 <Home size={16} className="mr-2" />

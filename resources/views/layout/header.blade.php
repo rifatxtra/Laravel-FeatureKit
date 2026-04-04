@@ -13,7 +13,7 @@
             </div>
             <div class="ml-10 space-x-4">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="inline-block bg-primary py-2 px-4 border border-transparent rounded-md text-base font-medium text-white hover:bg-primary/90 transition-colors">Dashboard</a>
+                    <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="inline-block bg-primary py-2 px-4 border border-transparent rounded-md text-base font-medium text-white hover:bg-primary/90 transition-colors">Dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="inline-block bg-transparent py-2 px-4 text-base font-medium text-foreground hover:text-primary">Sign in</a>
                     <a href="{{ route('auth.register.index') }}" class="ml-4 inline-block bg-primary py-2 px-4 border border-transparent rounded-md text-base font-medium text-white hover:bg-primary/90 transition-colors">Sign up</a>

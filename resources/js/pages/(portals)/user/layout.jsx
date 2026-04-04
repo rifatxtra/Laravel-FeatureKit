@@ -218,7 +218,10 @@ export default function UserLayout({ children }) {
 
                             {/* Back to Website Link */}
                             <Link
-                                href="/"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    router.visit("/");
+                                }}
                                 className="hidden md:flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors"
                             >
                                 <Home size={16} className="mr-2" />

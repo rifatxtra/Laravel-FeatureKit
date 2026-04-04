@@ -35,6 +35,7 @@
                     <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mt-8">Systems</h3>
                     <ul class="mt-4 space-y-2">
                         <li><a href="#mail" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Mailing System</a></li>
+                        <li><a href="#notifications" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Notification System</a></li>
                         <li><a href="#utilities" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">JS Utility Suite</a></li>
                         <li><a href="#hooks" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">React Hooks</a></li>
                         <li><a href="#theming" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Design Tokens</a></li>
@@ -233,8 +234,48 @@ $this->noContent();      // 204</code></pre>
         'actionUrl'  => 'https://example.com/track/1234',
     ]
 ));</code></pre>
+                </section>
 
-                    <p>Every email wraps in a professional master layout (<code>emails/layout.blade.php</code>) with logo, app name header, white content card, copyright footer, and optional unsubscribe link.</p>
+                {{-- NOTIFICATIONS --}}
+                <section id="notifications" class="mt-16 border-t border-surface-foreground/10 pt-10">
+                    <h2 class="text-3xl font-extrabold text-foreground mb-6">Unified Notification System</h2>
+                    <p>FeatureKit uses an <strong>Event-Driven Architecture</strong> to handle notifications. This keeps your business logic clean and allows for asynchronous processing.</p>
+
+                    <h3 class="text-xl font-bold text-foreground mt-8 mb-4">The <code>NotificationCreated</code> Event</h3>
+                    <p>Trigger notifications from any Service or Controller using a single shared event:</p>
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner my-6"><code>use App\Features\Notification\Events\NotificationCreated;
+
+event(new NotificationCreated(
+    user: $auth_user,
+    category: 'Account',
+    title: 'Profile Updated',
+    message: 'Your profile has been successfully updated.'
+));</code></pre>
+
+                    <h3 class="text-xl font-bold text-foreground mt-8 mb-4 tracking-tight uppercase text-xs text-primary">Key Features</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">⚡ Queue-Backed</span>
+                            <p class="text-xs opacity-60 mt-1">The listener implements ShouldQueue, ensuring high performance by offloading DB writes to the background.</p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">🛡️ Role-Aware</span>
+                            <p class="text-xs opacity-60 mt-1">Automatically routes records to Admin or User notification tables based on the recipient's role.</p>
+                        </div>
+                    </div>
+                </section>
+
+                {{-- ADVANCED PATTERNS --}}
+                <section id="advanced-patterns" class="mt-16 border-t border-surface-foreground/10 pt-10">
+                    <h2 class="text-3xl font-extrabold text-foreground mb-6">Advanced Patterns</h2>
+                    
+                    <h3 class="text-lg font-bold text-foreground mt-8 mb-4">1. Independent User Models</h3>
+                    <p class="text-sm opacity-80 leading-relaxed">For large-scale apps, FeatureKit promotes <strong>Feature-Specific User Models</strong> (e.g., <code>App\Features\Profile\Admin\Models\User</code>). This prevents the core User model from becoming overloaded and allows for clean, domain-specific logic.</p>
+
+                    <h3 class="text-lg font-bold text-foreground mt-8 mb-4">2. Private Storage & Secure Delivery</h3>
+                    <p class="text-sm opacity-80 leading-relaxed mb-4">Sensitive assets like profile images are stored in <code>storage/app/private/</code>. Access is gated through modular feature controllers and role-protected routes.</p>
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner"><code>// Route defined inside Feature web.php
+Route::get('/admin/profile-image', [ProfileImageController::class, 'show']);</code></pre>
                 </section>
 
                 {{-- COMMANDS --}}

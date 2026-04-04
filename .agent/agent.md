@@ -435,10 +435,10 @@ Use these CSS classes everywhere — **NEVER use arbitrary colors.**
 
 | Token | Class Examples | Color |
 |---|---|---|
-| **primary** | `bg-primary`, `text-primary`, `border-primary` | Indigo (OKLCH) |
+| **primary** | `bg-primary`, `text-primary`, `border-primary` | OKLCH color space |
 | **primary-foreground** | `text-primary-foreground` | White |
-| **primary-surface** | `bg-primary-surface` | Light indigo tint |
-| **secondary** | `bg-secondary`, `text-secondary` | Cyan (OKLCH) |
+| **primary-surface** | `bg-primary-surface` | Light tint |
+| **secondary** | `bg-secondary`, `text-secondary` | OKLCH |
 | **surface** | `bg-surface` | Near-white |
 | **surface-foreground** | `text-surface-foreground` | Dark text |
 | **surface-muted** | `bg-surface-muted` | Light gray |
@@ -450,13 +450,6 @@ Use these CSS classes everywhere — **NEVER use arbitrary colors.**
 ### Typography
 
 Font: `"Instrument Sans"` (defined in `--font-sans`).
-
-### White-Labeling
-
-Change one line in `resources/css/app.css`:
-```css
---color-primary: oklch(0.65 0.20 150); /* indigo → green */
-```
 
 ---
 
@@ -475,6 +468,41 @@ Change one line in `resources/css/app.css`:
 
 ---
 
+## 🔔 17. Unified Notification System
+
+FeatureKit uses a **Event-Driven Unified Notification System**.
+
+### `NotificationCreated` Event
+A single global event (`App\Features\Notification\Events\NotificationCreated`) triggers notifications across the app.
+
+```php
+use App\Features\Notification\Events\NotificationCreated;
+
+event(new NotificationCreated(
+    user: $user, 
+    category: 'Security', 
+    title: 'Profile Updated', 
+    message: 'Your profile has been updated.'
+));
+```
+
+### `CreateNotificationRecord` Listener
+- **Location**: `App\Features\Notification\Listeners\CreateNotificationRecord`
+- **Queueable**: Implements `ShouldQueue` for background processing.
+- **Role-Aware**: Automatically targets `AdminNotification` or `UserNotification`.
+
+---
+
+## 🏗️ 18. Advanced Feature Patterns
+
+### Independent User Models
+Use feature-specific models (e.g., `App\Features\Profile\Admin\Models\User`) to decouple role logic from the base `User` model.
+
+### Secure Private Storage
+Assets like profile images are stored in `storage/app/private/` and delivered via modular feature controllers (e.g., `ProfileImageController`).
+
+---
+
 ## 📝 Naming & Path Conventions
 
 | Thing | Convention | Example |
@@ -488,7 +516,6 @@ Change one line in `resources/css/app.css`:
 | JS Hooks | camelCase with `use` prefix | `useAuth()`, `useHasRole()` |
 | Blade views | kebab-case / dot notation | `pages.home.page`, `emails.auth.forgot-password-body` |
 | Routes names | dot-separated | `auth.login.index`, `admin.dashboard` |
-| CSS tokens | kebab-case | `bg-primary`, `text-surface-foreground` |
 
 ---
 
@@ -499,19 +526,6 @@ Change one line in `resources/css/app.css`:
 | `composer setup` | Install deps + .env + key + migrate + npm install + build |
 | `composer dev` | Starts 4 concurrent processes: serve, queue:listen, pail, vite dev |
 | `composer test` | Clear config + run PHPUnit |
-| `npm run dev` | Vite dev server with HMR |
-| `npm run build` | Production build |
-
-### Vite Config
-- Entry: `resources/css/app.css` + `resources/js/app.jsx`
-- Alias: `@` → `/resources/js`
-- HMR watches: `resources/**`, `app/Features/**`
-
-### Environment Defaults
-- **Database:** SQLite (`database/database.sqlite`)
-- **Queue:** Database driver
-- **Mail:** Log driver (switch to SMTP for production)
-- **Session:** Database-backed
 
 ---
 
@@ -525,13 +539,15 @@ Change one line in `resources/css/app.css`:
 6. **NEVER** use arbitrary CSS colors — use the semantic design tokens
 7. **NEVER** recreate utilities that already exist (check `@/Utils` and `@/Hooks` first)
 8. **NEVER** manually set up Toast/Modal/Spinner — `MainLayout` provides them automatically
-9. **NEVER** create middleware outside `app/Core/Middleware/` — that is the only middleware location
-10. **ALWAYS** extend `BaseController` for controllers
-11. **ALWAYS** extend `BaseService` for services
-12. **ALWAYS** extend `BaseException` for exceptions
+9. **ALWAYS** extend `BaseController` for controllers
+10. **ALWAYS** extend `BaseService` for services
+11. **ALWAYS** extend `BaseException` for exceptions
+12. **ALWAYS** use `NotificationCreated` event for triggering user-facing notifications.
 13. **ALWAYS** use constructor injection for services in controllers
 14. **ALWAYS** use `(portals)/` prefix in Inertia render path for portal pages
-15. **ALWAYS** use the existing `useModal()` hook for modals (don't create new modal state)
-16. **ALWAYS** use `flash()` session helpers for toast notifications (the Toast component reads them automatically)
-17. **ALWAYS** use `middleware('role:admin')` for role-gating (don't build custom auth checks in controllers)
-18. **ALWAYS** put new middleware in `app/Core/Middleware/` and register in `bootstrap/app.php`
+15. **ALWAYS** use `middleware('role:admin')` for role-gating.
+
+---
+
+Developed and Maintained by [Rifatxtra](https://rifatxtra.com).
+MIT Licensed. Open for everyone to scale.
