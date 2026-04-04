@@ -21,7 +21,7 @@ class LandingController extends BaseController
         if ($request->header('X-Inertia')) {
             return Inertia::location(route('landing.docs'));
         }
-        return view('pages.home.docs');
+        return view('pages.documentation.page');
     }
 
     public function features(Request $request)
@@ -29,6 +29,6 @@ class LandingController extends BaseController
         if ($request->header('X-Inertia')) {
             return Inertia::location(route('landing.features'));
         }
-        return view('pages.home.features');
+        return view('pages.features.page');
     }
 }

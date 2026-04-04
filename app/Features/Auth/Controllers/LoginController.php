@@ -19,9 +19,12 @@ class LoginController extends BaseController
         if (Auth::check()) {
             $role = Auth::user()->role;
             if ($role === 'admin') {
-                return inertia('(portals)/admin/dashboard/page');
+                return Inertia::location(route('admin.dashboard'));
+            } else if ($role === 'user') {
+                return Inertia::location(route('user.dashboard'));
+            } else {
+                abort(403);
             }
-            return inertia('(portals)/user/dashboard/page');
         }
         return view('pages.auth.login.page', [
             'app_name' => config('app.name'),
@@ -45,10 +48,12 @@ class LoginController extends BaseController
         $user = Auth::user();
 
         if ($user->role === 'admin') {
-            return inertia('(portals)/admin/dashboard/page');
+            return Inertia::location(route('admin.dashboard'));
+        } else if ($user->role === 'user') {
+            return Inertia::location(route('user.dashboard'));
+        } else {
+            abort(403);
         }
-
-        return inertia('(portals)/user/dashboard/page');
     }
 
     public function logout()

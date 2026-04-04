@@ -15,6 +15,7 @@ import {
     Bell,
     Settings,
     Key,
+    History,
 } from "lucide-react";
 
 import MainLayout from "../../../Components/Layout/MainLayout";
@@ -47,6 +48,7 @@ export default function UserLayout({ children }) {
 
     const navigation = [
         { name: "Dashboard", href: "/user/dashboard", icon: LayoutDashboard },
+        { name: "Activity Logs", href: "/user/activity-logs", icon: History },
     ];
 
     const handleLogout = (e) => {

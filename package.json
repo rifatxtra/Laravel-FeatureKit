@@ -2,6 +2,23 @@
     "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",
+    "name": "laravel-feature-kit",
+    "version": "v2.1.1",
+    "description": "Feature Kit - Professional Laravel 12 Feature-Driven Starter Kit with Inertia.js v2, React 19, and Tailwind CSS v4.",
+    "keywords": [
+        "laravel",
+        "laravel-12",
+        "laravel starter-kit",
+        "laravel feature kit",
+        "feature kit"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rifat",
+            "email": "contact@rifatxtra.com"
+        }
+    ],
     "scripts": {
         "build": "vite build",
         "dev": "vite"

@@ -3,6 +3,7 @@
 namespace App\Features\Auth\Services;
 
 use App\Core\BaseService;
+use App\Features\ActivityLog\Events\ActivityLogged;
 use App\Features\Auth\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -25,6 +26,9 @@ class LoginService extends BaseService
                 'last_login_at' => now(),
                 'last_login_ip' => request()->ip(),
             ]);
+
+            event(new ActivityLogged(Auth::user(), 'login', 'User logged in successfully.', 'security'));
+
             return true;
         }
 

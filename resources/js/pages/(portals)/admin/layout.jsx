@@ -60,7 +60,6 @@ export default function AdminLayout({ children }) {
             href: "/admin/settings",
             icon: Settings,
         },
-        { name: "SEO", href: "/admin/seo", icon: Globe },
         { name: "Cache", href: "/admin/cache", icon: Zap },
         {
             name: "System Health",
@@ -71,11 +70,6 @@ export default function AdminLayout({ children }) {
             name: "Activity Logs",
             href: "/admin/activity-logs",
             icon: History,
-        },
-        {
-            name: "Demo Shop",
-            href: "/payment/demo",
-            icon: ShoppingCart,
         },
     ];
 

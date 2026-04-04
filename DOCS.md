@@ -24,6 +24,8 @@ Welcome to the definitive guide for **rifatxtra/laravel-featurekit**. This docum
 16. [Quick Reference Table](#-16-quick-reference-table)
 17. [Unified Notification System](#-17-unified-notification-system)
 18. [Advanced Feature Patterns (Independent Models & Private Storage)](#-18-advanced-feature-patterns)
+19. [Activity Logs System](#-19-activity-logs-system)
+20. [Core Administrative Hubs](#-20-core-administrative-hubs)
 
 ---
 
@@ -399,9 +401,17 @@ All components live in `resources/js/Components/ui/` and are production-ready.
 Automatically reads Laravel flash messages (`flash.success`, `flash.error`, `flash.info`, `flash.warning`) from Inertia shared data and displays styled notifications.
 
 - Auto-dismisses after 5 seconds.
-- Supports 4 types: success (green), error (red), warning (yellow), info (blue).
 - Slide-in animation with close button.
 - Stacks multiple toasts vertically.
+
+#### Flash Key Mapping & Colors
+
+| Flash Session Key | UI Badge / Border Color | Icon Used | Purpose |
+| :--- | :--- | :--- | :--- |
+| `success` | **Green** (`bg-green-50`, `text-green-800`) | Checkmark Circle (Green) | Successful operations (e.g. Profile Saved). |
+| `error` | **Red** (`bg-red-50`, `text-red-800`) | X Circle (Red) | Fatal exceptions, validation halts. |
+| `warning` | **Yellow** (`bg-yellow-50`, `text-yellow-800`) | Exclamation Triangle (Yellow) | Cautionary warnings or required actions. |
+| `info` | **Blue** (`bg-blue-50`, `text-blue-800`) | Information Circle (Blue) | General instructional alerts. |
 
 **Backend Usage:**
 
@@ -417,8 +427,17 @@ A context-driven modal controlled via `ModalContext`. Features:
 - **ESC key** closes the modal.
 - **Overlay click** closes by default (configurable).
 - **Body scroll lock** when open.
-- **5 size presets:** `sm` (max-w-md), `md` (max-w-lg), `lg` (max-w-2xl), `xl` (max-w-4xl), `full`.
 - Fade-in + slide-up animations.
+
+#### Modal Size Presets
+
+| Size Prop | CSS Max Width | Typical Use Case |
+| :--- | :--- | :--- |
+| `sm` | `max-w-md` (28rem) | Simple confirmation dialogs, quick edits. |
+| `md` | `max-w-lg` (32rem) | Standard forms, logins, standard promo cards. |
+| `lg` | `max-w-2xl` (42rem) | Multi-column forms, detailed settings views. |
+| `xl` | `max-w-4xl` (56rem) | Complex tables, document previews, dashboards. |
+| `full` | `w-full h-full` | Immersive media viewers, full-screen wizards. |
 
 ```javascript
 import { useModal } from "@/Contexts/ModalContext";
@@ -1152,7 +1171,34 @@ updated_at      TIMESTAMP
 
 ---
 
-## 🔔 17. Unified Notification System
+## ✉️ 17. Universal Mailing System
+
+Stop writing repetitive mailable classes. One `GeneralMail` class handles every email in your app — queued by default.
+
+```php
+Mail::to($user)->queue(new GeneralMail(
+    mailSubject: 'Your Order Has Shipped',
+    contentView: 'emails.orders.shipped-body',
+    data: [
+        'title'      => 'Order Shipped!',
+        'body'       => 'Your order #1234 is on its way.',
+        'actionText' => 'Track Order',
+        'actionUrl'  => 'https://example.com/track/1234',
+    ]
+));
+```
+
+#### GeneralMail Constructor Map
+
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `mailSubject` | `string` | **Yes** | Sets the exact email subject line. |
+| `contentView` | `string` | **Yes** | The exact dot-notation Blade path for the template to render. |
+| `data` | `array` | No | An array of dynamic values injected into the Blade template layout. |
+
+---
+
+## 🔔 18. Unified Notification System
 
 FeatureKit uses a **Event-Driven Unified Notification System** that decouple features from the notification logic.
 
@@ -1172,6 +1218,15 @@ event(new NotificationCreated(
 ));
 ```
 
+#### NotificationCreated Event Map
+
+| Argument | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `user` | `User` | **Yes** | The Eloquent model instance of the user receiving the notification. |
+| `title` | `string` | **Yes** | The explicit bold summary title shown in the notification list. |
+| `message` | `string` | **Yes** | The detailed descriptive payload of the notification. |
+| `category` | `string` | No (default: `system`) | Categorizes the notification for backend log aggregations (e.g. `Account`, `System`, `Billing`). |
+
 ### `CreateNotificationRecord` Listener
 
 The listener (`App\Features\Notification\Listeners\CreateNotificationRecord`) is automatically registered in `AppServiceProvider`. It handles:
@@ -1187,7 +1242,9 @@ php artisan make:feature:event {FeatureName} {EventName}
 
 ---
 
-## 🏗️ 18. Advanced Feature Patterns
+---
+
+## 🏗️ 19. Advanced Feature Patterns
 
 ### Independent User Models
 For complex role-based systems, FeatureKit recommends using **Feature-Specific User Models** (e.g., `App\Features\Profile\Admin\Models\User`). 
@@ -1202,7 +1259,113 @@ FeatureKit implements a secure pattern for sensitive files like profile images:
 
 ---
 
+## 📈 19. Activity Logs System
+
+FeatureKit provides a highly extensible, **Event-Driven Activity Logging System** that captures and stores user interactions automatically.
+
+### The `ActivityLogged` Event & `CreateActivityLogRecord` Listener
+
+The system uses a synchronous event-listener combination to guarantee log capture, ensuring that audit trails are reliable even without background workers active.
+
+```php
+use App\Features\ActivityLog\Events\ActivityLogged;
+
+// Dispatch from any Service
+event(new ActivityLogged(
+    user: $auth_user,
+    action: 'login',
+    description: 'User logged in successfully.'
+));
+```
+
+The listener (`CreateActivityLogRecord`) captures:
+- `user_id` and polymorphic `subject_type`
+- The `action` keyword
+- Detailed `description`
+- `ip_address` and `user_agent` 
+
+### Flexible UI Badges
+
+The Activity Logs UI automatically scales with your application. The `getActionMeta` utility on the frontend maps standard keywords inside your action strings to visually distinct badges.
+
+| Action Keyword Match | Badge Color | Description |
+| :--- | :--- | :--- |
+| `create`, `add`, `store` | **Green** | Best for resources being added to the database. |
+| `update`, `edit` | **Blue** | Best for standard modification of resources. |
+| `delete`, `remove`, `destroy` | **Red** | Best for destructive UI actions (deletion or archiving). |
+| `login`, `auth` | **Emerald** | Reserved for authentication milestones. |
+| `fail`, `error` | **Red** | Highlights failed transactions or exceptions. |
+| `password`, `security` | **Amber** | Critical for tracking sensitive user credential changes. |
+| `setting`, `config` | **Purple** | Settings or application environment modifications. |
+| `view`, `read`, `download`, `export` | **Indigo** | Best for read-only tracking or exporting artifacts. |
+| *No Match* | **Gray** | Automatic title-casing fallback for custom events. |
+
+If no keyword matches, it gracefully transforms the action name (e.g., `invoice_generated`) into a readable format ("Invoice Generated") and categorizes it with a neutral gray badge.
+
 ---
 
-Developed and Maintained by [Rifatxtra](https://rifatxtra.com).
+## 🏛️ 20. Core Administrative Hubs
+
+FeatureKit provides 4 scaffolded administration points, carefully isolated into feature domains and powered by thin-controller, thick-service architectures. Each hub perfectly illustrates how to execute complex logic without polluting controllers.
+
+### 👥 1. User Management (`App\Features\UserManagement`)
+A comprehensive control center replacing basic scaffolding, wired to a dedicated `UserService`.
+
+- **Live Pagination & Search**: Automatically synchronizes UI parameters with Inertia queries.
+- **Secure Provisioning**: An isolated "Add User" modal that directly validates against `StoreUserRequest` and properly hashes credentials before executing DB insertions.
+- **Role & Access Interceptors**: You can safely flip User flags (`is_active` for banning, `role` for elevation) utilizing `UpdateUserRequest`.
+- **Automatic Audit Trails**: The `UserService` dynamically detects toggle changes, such as suspending an account, and automatically fires `ActivityLogged` events.
+
+```php
+// Inside UserService.php
+if ($user->isDirty('is_active')) {
+    $statusText = $user->is_active ? 'Un-suspended' : 'Suspended';
+    event(new ActivityLogged(auth()->user(), "account_status", "{$statusText} user: {$user->email}"));
+}
+```
+
+### ⚡ 2. UI Cache Management (`App\Features\CacheManagement`)
+A powerful, graphical representation for server configuration caching.
+
+- The `CacheService` prevents bloated controllers by extracting specific `Artisan::call()` mapping logic into dedicated helper methods.
+- Safely exposes flushing commands via UI: `cache:clear`, `route:clear`, `config:clear`, `view:clear`, or `optimize:clear`.
+- Utilizes the global `ModalContext` on the frontend before executing destructive Artisan commands.
+
+### ❤️ 3. System Health Monitor (`App\Features\SystemHealth`)
+A visually striking "Live Metrics" dashboard analyzing the environment.
+
+Instead of performing connections inside the controller, the modular `HealthStatusService` runs runtime checks to fetch:
+1. **PDO SQL Integrity**: Verifying the current database connection is stable.
+2. **Caching Driver Latency**: Assessing if Redis/Memcached is responding quickly.
+3. **Hardware Config Constraints**: Reading `ini_get('memory_limit')` to warn about potential OOM issues.
+4. **Stack Diagnostics**: Displaying precise Laravel and PHP versions via `app()->version()` and `phpversion()`.
+
+### 📊 4. Professional Dashboards (`App\Features\Dashboard`)
+Designed exclusively to prove the power of cleanly separating queries away from the HTTP layer.
+
+The logic is split into Role-Based folders (`Admin` and `User`). We strictly abstract metric queries and relation loads into their respective `AdminDashboardService` and `UserDashboardService`. 
+
+#### The Admin Dashboard
+Tracks broad system performance overviews by calculating active vs suspended users, measuring total action milestones, and fetching the 10 most recent global `ActivityLogs` from across the entire app.
+
+#### The User Dashboard
+A personalized welcome hub that tracks the individual's exact `member_since` diff (e.g. "1 month ago"). It dynamically calculates a **Profile Completion Health** by evaluating fields like `profile_image`, `phone` and generates a responsive UI progress bar. Finally, it exposes a localized, private feed of their own event log history.
+
+```php
+// Example: Thin Dashboard Controller
+public function index() {
+    $user = Auth::user();
+    return inertia('(portals)/user/dashboard/page', [
+        'stats' => $this->dashboardService->getUserStats($user),
+        'recent_activity' => $this->dashboardService->getRecentActivity($user, 10)
+    ]);
+}
+```
+
+### ⚙️ System Settings (Placeholder)
+`App\Features\SystemSettings` is an empty foundational structure wired into the `AdminLayout`, standing by for your app's custom global variable definitions.
+
+---
+
+### Developed and Maintained by [Rifatxtra](https://rifatxtra.com).
 MIT Licensed. Open for everyone to scale.

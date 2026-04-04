@@ -23,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
             \App\Features\Notification\Events\NotificationCreated::class,
             [\App\Features\Notification\Listeners\CreateNotificationRecord::class, 'handle']
         );
+
+        \Illuminate\Support\Facades\Event::listen(
+            \App\Features\ActivityLog\Events\ActivityLogged::class,
+            [\App\Features\ActivityLog\Listeners\CreateActivityLogRecord::class, 'handle']
+        );
     }
 }

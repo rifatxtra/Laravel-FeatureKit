@@ -7,6 +7,7 @@ use App\Core\BaseService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Features\Notification\Events\NotificationCreated;
+use App\Features\ActivityLog\Events\ActivityLogged;
 
 class ProfileService extends BaseService
 {
@@ -26,6 +27,7 @@ class ProfileService extends BaseService
         $user->update($data);
 
         event(new NotificationCreated($user, 'Profile Updated', 'Your profile details have been successfully updated.', 'system'));
+        event(new ActivityLogged($user, 'profile_updated', 'Admin profile details updated.', 'system'));
 
         return $user;
     }
@@ -37,7 +39,8 @@ class ProfileService extends BaseService
         ]);
 
         event(new NotificationCreated($user, 'Password Changed', 'Your account password has been successfully updated.', 'system'));
+        event(new ActivityLogged($user, 'password_changed', 'Admin account password changed.', 'security'));
 
         return $user;
     }
-}
+}

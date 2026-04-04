@@ -21,9 +21,10 @@
             </div>
         </div>
         <div class="py-4 flex flex-wrap justify-center space-x-6 lg:hidden border-t border-surface-foreground/5">
+            <a href="/" class="text-xs font-semibold uppercase tracking-wider text-surface-foreground hover:text-primary">Home</a>
             <a href="{{ route('landing.docs') }}" class="text-xs font-semibold uppercase tracking-wider text-surface-foreground hover:text-primary">Docs</a>
-            <a href="/" class="text-xs font-semibold uppercase tracking-wider text-surface-foreground hover:text-primary">Landing</a>
-            <a href="https://rifatxtra.com" target="_blank" class="text-xs font-semibold uppercase tracking-wider text-surface-foreground hover:text-primary">RifatXtra</a>
+            <a href="{{ route('landing.features') }}" class="text-xs font-semibold uppercase tracking-wider text-surface-foreground hover:text-primary">Features</a>
+            <a href="https://rifatxtra.com" target="_blank" class="text-xs font-semibold uppercase tracking-wider text-surface-foreground hover:text-primary">Author</a>
         </div>
     </nav>
 </header>

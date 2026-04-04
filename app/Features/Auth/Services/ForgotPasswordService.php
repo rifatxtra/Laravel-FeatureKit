@@ -3,6 +3,7 @@
 namespace App\Features\Auth\Services;
 
 use App\Core\BaseService;
+use App\Features\ActivityLog\Events\ActivityLogged;
 use App\Features\Auth\Models\User;
 use App\Mail\GeneralMail;
 use Illuminate\Support\Facades\DB;
@@ -71,6 +72,8 @@ class ForgotPasswordService extends BaseService
                 ])->save();
 
                 $user->setRememberToken(Str::random(60));
+
+                event(new ActivityLogged($user, 'password_reset', 'User password reset successfully.', 'security'));
             }
         );
     }

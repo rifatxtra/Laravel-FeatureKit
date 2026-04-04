@@ -3,7 +3,7 @@
     "name": "rifatxtra/laravel-featurekit",
     "version": "v2.1.1",
     "type": "project",
-    "description": "Professional Laravel 12 Feature-Driven Starter Kit with Inertia.js v2, React 19, and Tailwind CSS v4.",
+    "description": "Feature Kit - Professional Laravel 12 Feature-Driven Starter Kit with Inertia.js v2, React 19, and Tailwind CSS v4.",
     "keywords": [
         "laravel",
         "laravel-12",
@@ -12,7 +12,9 @@
         "tailwind-v4",
         "feature-driven",
         "architecture",
-        "starter-kit"
+        "laravel starter-kit",
+        "laravel feature kit",
+        "feature kit"
     ],
     "license": "MIT",
     "authors": [

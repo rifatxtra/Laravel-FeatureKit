@@ -1,1 +1,0 @@
-import{o as e,t}from"./app-DVM0uQhM.js";import n from"./layout-DvlnuHw7.js";e();var r=t();function i(){return(0,r.jsx)(n,{children:(0,r.jsx)(`h1`,{children:`Dashboard`})})}export{i as default};
