@@ -1,4 +1,4 @@
-# 🚀 Laravel FeatureKit v2.1.0 — Complete Technical Documentation
+# 🚀 Laravel FeatureKit v2.1.1 — Complete Technical Documentation
 
 Welcome to the definitive guide for **rifatxtra/laravel-featurekit**. This document covers every system, pattern, utility, and command in the project — no detail omitted.
 

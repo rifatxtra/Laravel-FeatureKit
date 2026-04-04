@@ -1,7 +1,7 @@
 @extends('pages.layout')
 
 @section('title', 'Features - Laravel Feature Kit')
-@section('description', 'Discover every feature in Laravel FeatureKit v2.1.0. Feature-Driven Architecture, React 19, 20+ hooks, 11 utilities, 7 Artisan commands, and more.')
+@section('description', 'Discover every feature in Laravel FeatureKit v2.1.1. Feature-Driven Architecture, React 19, 20+ hooks, 11 utilities, 7 Artisan commands, and more.')
 
 @section('content')
 <div class="bg-base py-20">
@@ -114,7 +114,7 @@
         <div class="text-center mb-12">
             <h2 class="text-3xl font-extrabold text-foreground sm:text-4xl mb-4">Everything Included</h2>
             <p class="max-w-2xl mx-auto text-lg text-surface-foreground/60">
-                A deep look at every system that ships with FeatureKit v2.1.0.
+                A deep look at every system that ships with FeatureKit v2.1.1.
             </p>
         </div>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import AdminLayout from "@/pages/(portals)/admin/layout";
-import { Link, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import Pagination from "@/Components/ui/Pagination";
 
 export default function Page() {
@@ -9,6 +9,7 @@ export default function Page() {
 
     return (
         <AdminLayout>
+            <Head title="Notifications" />
             <div className="w-full">
                 <h1 className="text-xl font-bold text-center mb-4 mt-4">
                     Admin Notifications

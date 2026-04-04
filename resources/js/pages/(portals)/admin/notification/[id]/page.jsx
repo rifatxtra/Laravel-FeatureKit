@@ -1,5 +1,5 @@
 import React from "react";
-import { usePage, Link } from "@inertiajs/react";
+import { usePage, Link, Head } from "@inertiajs/react";
 import AdminLayout from "@/pages/(portals)/admin/layout";
 
 export default function Page() {
@@ -8,6 +8,7 @@ export default function Page() {
 
     return (
         <AdminLayout>
+            <Head title={notification.title} />
             <div className="w-full max-w-3xl mx-auto p-4">
                 <Link
                     href={"/admin/notification"}

@@ -1,6 +1,6 @@
 import React from "react";
 import UserLayout from "@/pages/(portals)/user/layout";
-import { Link, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import Pagination from "@/Components/ui/Pagination";
 
 export default function page() {
@@ -8,6 +8,7 @@ export default function page() {
     const notifications = props.notifications;
     return (
         <UserLayout>
+            <Head title="Notifications" />
             <div className="w-full">
                 <h1 className="text-xl font-bold text-center mb-4 mt-4">
                     Notifications

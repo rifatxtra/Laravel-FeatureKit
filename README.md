@@ -1,4 +1,4 @@
-# 📦 rifatxtra/laravel-featurekit (v2.1.0)
+# 📦 rifatxtra/laravel-featurekit (v2.1.1)
 
 ### Professional Laravel 12 Feature-Driven Starter Kit.
 

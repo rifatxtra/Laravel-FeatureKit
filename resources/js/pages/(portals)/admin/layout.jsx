@@ -408,8 +408,8 @@ export default function AdminLayout({ children }) {
                                             </div>
 
                                             <Link
-                                                href="#"
-                                                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                                                href="/admin/profile"
+                                                className={`flex items-center px-4 py-2 text-sm transition-colors ${url === "/admin/profile" ? "text-primary bg-primary/5 font-semibold" : "text-gray-700 hover:bg-gray-50 hover:text-primary"}`}
                                             >
                                                 <User
                                                     size={16}
@@ -418,14 +418,14 @@ export default function AdminLayout({ children }) {
                                                 Admin Profile
                                             </Link>
                                             <Link
-                                                href="#"
-                                                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                                                href="/admin/profile/password"
+                                                className={`flex items-center px-4 py-2 text-sm transition-colors ${url === "/admin/profile/password" ? "text-primary bg-primary/5 font-semibold" : "text-gray-700 hover:bg-gray-50 hover:text-primary"}`}
                                             >
-                                                <Settings
+                                                <Key
                                                     size={16}
                                                     className="mr-2"
                                                 />
-                                                Global Settings
+                                                Change Password
                                             </Link>
 
                                             <div className="border-t border-gray-50 mt-1 pt-1">

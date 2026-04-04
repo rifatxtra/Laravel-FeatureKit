@@ -1,5 +1,5 @@
 import React from "react";
-import { usePage, Link } from "@inertiajs/react";
+import { usePage, Link, Head } from "@inertiajs/react";
 import UserLayout from "@/pages/(portals)/user/layout";
 
 export default function Page() {
@@ -8,6 +8,7 @@ export default function Page() {
 
     return (
         <UserLayout>
+            <Head title={`${notification.title}`} />
             <div className="w-full mx-auto p-4">
                 {/* Back button */}
                 <Link

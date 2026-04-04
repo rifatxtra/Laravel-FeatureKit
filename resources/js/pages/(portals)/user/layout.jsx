@@ -378,8 +378,8 @@ export default function UserLayout({ children }) {
                                             </div>
 
                                             <Link
-                                                href="#"
-                                                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                                                href="/user/profile"
+                                                className={`flex items-center px-4 py-2 text-sm transition-colors ${url === "/user/profile" ? "text-primary bg-primary/5 font-semibold" : "text-gray-700 hover:bg-gray-50 hover:text-primary"}`}
                                             >
                                                 <User
                                                     size={16}
@@ -388,8 +388,8 @@ export default function UserLayout({ children }) {
                                                 Profile Settings
                                             </Link>
                                             <Link
-                                                href="#"
-                                                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                                                href="/user/profile/password"
+                                                className={`flex items-center px-4 py-2 text-sm transition-colors ${url === "/user/profile/password" ? "text-primary bg-primary/5 font-semibold" : "text-gray-700 hover:bg-gray-50 hover:text-primary"}`}
                                             >
                                                 <Key
                                                     size={16}

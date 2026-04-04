@@ -42,6 +42,10 @@ class HandleInertiaRequests extends Middleware
                 'user'  => $request->user() ? array_merge(
                     $request->user()->only(['id', 'name', 'email', 'phone', 'email_verified_at', 'created_at']),
                     [
+                        // Secure Profile Image URL
+                        'profile_image'              => $request->user()->profile_image 
+                                                        ? route($request->user()->role . '.profile-image', ['filename' => $request->user()->profile_image]) 
+                                                        : null,
                         // Include roles/permissions if the relationships exist on the User model
                         'roles'                      => method_exists($request->user(), 'roles') ? $request->user()->roles : [],
                         'permissions'                => method_exists($request->user(), 'permissions') ? $request->user()->permissions : [],
