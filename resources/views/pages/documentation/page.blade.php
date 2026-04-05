@@ -50,6 +50,7 @@
                         <li><a href="#activity-logs" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Activity Logs</a></li>
                         <li><a href="#admin-hubs" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Admin Hubs</a></li>
                         <li><a href="#ui-kit" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">React UI Kit</a></li>
+                        <li><a href="#system-settings" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">System Settings</a></li>
                         <li><a href="#utilities" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">JS Utility Suite</a></li>
                         <li><a href="#hooks" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">React Hooks</a></li>
                         <li><a href="#theming" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Design Tokens</a></li>
@@ -595,6 +596,55 @@ public function index() {
                     <p class="text-sm opacity-80 leading-relaxed mb-4">Sensitive assets like profile images are stored in <code>storage/app/private/</code>. Access is gated through modular feature controllers and role-protected routes.</p>
                     <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner"><code>// Route defined inside Feature web.php
 Route::get('/admin/profile-image', [ProfileImageController::class, 'show']);</code></pre>
+                </section>
+
+                {{-- SYSTEM SETTINGS --}}
+                <section id="system-settings" class="mt-16 border-t border-surface-foreground/10 pt-10">
+                    <h2 class="text-3xl font-extrabold text-foreground mb-6">System Settings & Branding</h2>
+                    <p>FeatureKit provides a centralized hub for managing application-wide configurations directly from the Admin portal. All settings are stored in the <code>settings</code> table and optimized with <code>Cache::rememberForever</code>.</p>
+
+                    <h3 class="text-xl font-bold text-foreground mt-8 mb-4">1. Dynamic Branding</h3>
+                    <div class="my-6 rounded-2xl overflow-hidden border border-surface-foreground/10 bg-surface shadow-sm">
+                        <img src="/assets/dynamic-branding.png" alt="Dynamic Branding" class="w-full h-auto">
+                    </div>
+                    <p class="text-sm opacity-80 leading-relaxed mb-4">
+                        Change your application's identity without touching code. Managed via the <code>SettingsService</code>:
+                    </p>
+                    <ul class="list-disc pl-5 space-y-2 opacity-80 text-sm mb-6">
+                        <li><strong>App Name</strong>: Reflected instantly in SEO tags, Emails, and Sidebar headers.</li>
+                        <li><strong>Logo Management</strong>: Uploaded logos are saved to <code>public/logo.png</code> for high-performance delivery.</li>
+                        <li><strong>Favicon Engine</strong>: Upload any image, and the <code>FaviconUtil</code> will automatically convert it to a 32x32 professional <code>.ico</code> file.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-foreground mt-8 mb-4">2. Smart Maintenance System</h3>
+                    <div class="my-6 rounded-2xl overflow-hidden border border-surface-foreground/10 bg-surface shadow-sm">
+                        <img src="/assets/maintenance1.png" alt="Maintenance Mode" class="w-full h-auto">
+                    </div>
+                    <div class="my-6 rounded-2xl overflow-hidden border border-surface-foreground/10 bg-surface shadow-sm">
+                        <img src="/assets/maintenance2.png" alt="Maintenance Mode" class="w-full h-auto">
+                    </div>
+                    <p class="text-sm opacity-80 leading-relaxed mb-4">
+                        A custom implementation of maintenance mode that keeps your administrative team productive while the site is "down".
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">🛡️ Admin Bypass</span>
+                            <p class="text-xs opacity-60 mt-1">Admins can always access <code>/admin/*</code> and <code>/auth/*</code> routes, even when maintenance is active.</p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">💅 Branded 503</span>
+                            <p class="text-xs opacity-60 mt-1">Visitors see a premium, branded maintenance page showing your dynamic logo and an estimated completion time.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-foreground mt-10 mb-4">Implementation Details</h3>
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner my-6"><code>// Accessing settings in Blade or PHP
+\App\Features\SystemSettings\Models\Setting::get('app_name', 'Default');
+
+// Logic inside CheckMaintenanceMode middleware
+if ($isMaintenance && !$isAdmin) {
+    return response()->view('errors.503', [], 503);
+}</code></pre>
                 </section>
 
                 {{-- COMMANDS --}}

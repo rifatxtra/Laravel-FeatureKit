@@ -1,6 +1,15 @@
-# 🚀 Laravel Feature Kit v2.1.1 — Complete Technical Documentation
+# 🚀 Laravel Feature Kit v2.1.2 — Complete Technical Documentation
 
 Welcome to the definitive guide for **Laravel Feature Kit (rifatxtra/laravel-feature-kit)**. This document covers every system, pattern, utility, and command in the project — no detail omitted.
+
+### ⚙️ System Settings & Branding (`App\Features\SystemSettings`)
+
+Core interface for dynamic app configuration.
+
+- **Models**: `Setting` (key/value with caching).
+- **Logic**: `SettingsService` (branded asset management), `FaviconUtil` (ICO conversion).
+- **Maintenance**: `CheckMaintenanceMode` middleware (Admin bypass + Inertia reload support).
+- **Usage**: `\App\Features\SystemSettings\Models\Setting::get($key, $default)`.
 
 ---
 
@@ -207,13 +216,13 @@ Two middleware classes are registered in `bootstrap/app.php`:
 
 Appended to the `web` middleware stack. Shares data to **every Inertia page** automatically:
 
-| Shared Key   | Type           | Powers                                               |
-| :----------- | :------------- | :--------------------------------------------------- |
-| `auth.check` | `boolean`      | `useIsAuthenticated()`, `useIsGuest()`               |
-| `auth.user`  | `object\|null` | `useUser()`, `useHasRole()`, `useHasPermission()`    |
-| `flash`      | `object`       | `useFlash()`, `useFlashSuccess()`, `Toast` component |
-| `csrf_token` | `string`       | `useCsrfToken()`                                     |
-| `app`        | `object`       | `useAppConfig()`                                     |
+| Shared Key   | Type      | Powers                                               |
+| :----------- | :-------- | :--------------------------------------------------- | ------------------------------------------------- |
+| `auth.check` | `boolean` | `useIsAuthenticated()`, `useIsGuest()`               |
+| `auth.user`  | `object   | null`                                                | `useUser()`, `useHasRole()`, `useHasPermission()` |
+| `flash`      | `object`  | `useFlash()`, `useFlashSuccess()`, `Toast` component |
+| `csrf_token` | `string`  | `useCsrfToken()`                                     |
+| `app`        | `object`  | `useAppConfig()`                                     |
 
 The `auth.user` object includes: `id`, `name`, `email`, `phone`, `email_verified_at`, `created_at`, `roles`, `permissions`. Roles/permissions are auto-included if the relationships exist on the User model.
 
@@ -406,12 +415,12 @@ Automatically reads Laravel flash messages (`flash.success`, `flash.error`, `fla
 
 #### Flash Key Mapping & Colors
 
-| Flash Session Key | UI Badge / Border Color | Icon Used | Purpose |
-| :--- | :--- | :--- | :--- |
-| `success` | **Green** (`bg-green-50`, `text-green-800`) | Checkmark Circle (Green) | Successful operations (e.g. Profile Saved). |
-| `error` | **Red** (`bg-red-50`, `text-red-800`) | X Circle (Red) | Fatal exceptions, validation halts. |
-| `warning` | **Yellow** (`bg-yellow-50`, `text-yellow-800`) | Exclamation Triangle (Yellow) | Cautionary warnings or required actions. |
-| `info` | **Blue** (`bg-blue-50`, `text-blue-800`) | Information Circle (Blue) | General instructional alerts. |
+| Flash Session Key | UI Badge / Border Color                        | Icon Used                     | Purpose                                     |
+| :---------------- | :--------------------------------------------- | :---------------------------- | :------------------------------------------ |
+| `success`         | **Green** (`bg-green-50`, `text-green-800`)    | Checkmark Circle (Green)      | Successful operations (e.g. Profile Saved). |
+| `error`           | **Red** (`bg-red-50`, `text-red-800`)          | X Circle (Red)                | Fatal exceptions, validation halts.         |
+| `warning`         | **Yellow** (`bg-yellow-50`, `text-yellow-800`) | Exclamation Triangle (Yellow) | Cautionary warnings or required actions.    |
+| `info`            | **Blue** (`bg-blue-50`, `text-blue-800`)       | Information Circle (Blue)     | General instructional alerts.               |
 
 **Backend Usage:**
 
@@ -431,13 +440,13 @@ A context-driven modal controlled via `ModalContext`. Features:
 
 #### Modal Size Presets
 
-| Size Prop | CSS Max Width | Typical Use Case |
-| :--- | :--- | :--- |
-| `sm` | `max-w-md` (28rem) | Simple confirmation dialogs, quick edits. |
-| `md` | `max-w-lg` (32rem) | Standard forms, logins, standard promo cards. |
-| `lg` | `max-w-2xl` (42rem) | Multi-column forms, detailed settings views. |
-| `xl` | `max-w-4xl` (56rem) | Complex tables, document previews, dashboards. |
-| `full` | `w-full h-full` | Immersive media viewers, full-screen wizards. |
+| Size Prop | CSS Max Width       | Typical Use Case                               |
+| :-------- | :------------------ | :--------------------------------------------- |
+| `sm`      | `max-w-md` (28rem)  | Simple confirmation dialogs, quick edits.      |
+| `md`      | `max-w-lg` (32rem)  | Standard forms, logins, standard promo cards.  |
+| `lg`      | `max-w-2xl` (42rem) | Multi-column forms, detailed settings views.   |
+| `xl`      | `max-w-4xl` (56rem) | Complex tables, document previews, dashboards. |
+| `full`    | `w-full h-full`     | Immersive media viewers, full-screen wizards.  |
 
 ```javascript
 import { useModal } from "@/Contexts/ModalContext";
@@ -570,14 +579,14 @@ All hooks are built on Inertia's `usePage()` and provide clean access to shared 
 
 ### Authentication Hooks
 
-| Hook                      | Returns        | Description                                                             |
-| :------------------------ | :------------- | :---------------------------------------------------------------------- |
-| `useAuth()`               | `auth` object  | Full auth data from server                                              |
-| `useUser()`               | `User \| null` | Current authenticated user                                              |
-| `useIsAuthenticated()`    | `boolean`      | Whether user is logged in                                               |
-| `useIsGuest()`            | `boolean`      | Whether user is a guest                                                 |
-| `useHasRole(roles)`       | `boolean`      | Check user role(s) — supports string, array, and `{name}` objects       |
-| `useHasPermission(perms)` | `boolean`      | Check user permission(s) — supports string, array, and `{name}` objects |
+| Hook                      | Returns       | Description                                                             |
+| :------------------------ | :------------ | :---------------------------------------------------------------------- | -------------------------- |
+| `useAuth()`               | `auth` object | Full auth data from server                                              |
+| `useUser()`               | `User         | null`                                                                   | Current authenticated user |
+| `useIsAuthenticated()`    | `boolean`     | Whether user is logged in                                               |
+| `useIsGuest()`            | `boolean`     | Whether user is a guest                                                 |
+| `useHasRole(roles)`       | `boolean`     | Check user role(s) — supports string, array, and `{name}` objects       |
+| `useHasPermission(perms)` | `boolean`     | Check user permission(s) — supports string, array, and `{name}` objects |
 
 ```javascript
 import { useUser, useHasRole } from "@/Hooks";
@@ -589,24 +598,24 @@ const isAdminOrMod = useHasRole(["admin", "moderator"]);
 
 ### Flash Message Hooks
 
-| Hook                   | Returns          | Description              |
-| :--------------------- | :--------------- | :----------------------- |
-| `useFlash()`           | `flash` object   | All flash data           |
-| `useFlashMessage(key)` | `string \| null` | Flash message by key     |
-| `useFlashSuccess()`    | `string \| null` | `flash.success` shortcut |
-| `useFlashError()`      | `string \| null` | `flash.error` shortcut   |
-| `useFlashWarning()`    | `string \| null` | `flash.warning` shortcut |
-| `useFlashInfo()`       | `string \| null` | `flash.info` shortcut    |
+| Hook                   | Returns        | Description    |
+| :--------------------- | :------------- | :------------- | ------------------------ |
+| `useFlash()`           | `flash` object | All flash data |
+| `useFlashMessage(key)` | `string        | null`          | Flash message by key     |
+| `useFlashSuccess()`    | `string        | null`          | `flash.success` shortcut |
+| `useFlashError()`      | `string        | null`          | `flash.error` shortcut   |
+| `useFlashWarning()`    | `string        | null`          | `flash.warning` shortcut |
+| `useFlashInfo()`       | `string        | null`          | `flash.info` shortcut    |
 
 ### Validation Error Hooks
 
-| Hook                    | Returns          | Description                         |
-| :---------------------- | :--------------- | :---------------------------------- |
-| `useErrors()`           | `object`         | All validation errors               |
-| `useError(field)`       | `string \| null` | First error for a specific field    |
-| `useHasErrors()`        | `boolean`        | Whether any errors exist            |
-| `useFieldErrors(field)` | `string[]`       | All errors for a specific field     |
-| `useFirstError(field?)` | `string \| null` | First error globally or for a field |
+| Hook                    | Returns    | Description                     |
+| :---------------------- | :--------- | :------------------------------ | ----------------------------------- |
+| `useErrors()`           | `object`   | All validation errors           |
+| `useError(field)`       | `string    | null`                           | First error for a specific field    |
+| `useHasErrors()`        | `boolean`  | Whether any errors exist        |
+| `useFieldErrors(field)` | `string[]` | All errors for a specific field |
+| `useFirstError(field?)` | `string    | null`                           | First error globally or for a field |
 
 ### Navigation & Config Hooks
 
@@ -833,6 +842,7 @@ Every email rendered via `GeneralMail` automatically wraps in a professional Mar
 ## 🔐 10. Auth Feature (Reference Implementation)
 
 The Auth feature is a **complete, working implementation** demonstrating all Feature Kit patterns.
+The `app/Features/Auth/` directory serves as the benchmark for how all features should be built.
 
 ### Controllers
 
@@ -841,6 +851,10 @@ The Auth feature is a **complete, working implementation** demonstrating all Fea
 | `LoginController`          | `index()`, `login()`                              | Renders login page, handles authentication |
 | `RegisterController`       | `index()`, `register()`                           | Renders registration page, creates user    |
 | `ForgotPasswordController` | `index()`, `send()`, `showResetForm()`, `reset()` | Full forgot/reset password flow            |
+
+- `LoginController`: Handles session creation and termination.
+- `RegisterController`: Handles new account creation.
+- `ForgotPasswordController`: Handles password reset flow.
 
 ### Services
 
@@ -1167,7 +1181,7 @@ updated_at      TIMESTAMP
 | **Custom Hooks**    | 20+ Inertia accessor hooks                                         | `resources/js/Hooks/useInertia.js`        |
 | **JS Utilities**    | 11 utility modules                                                 | `resources/js/Utils/`                     |
 | **Design Tokens**   | Tailwind v4 @theme                                                 | `resources/css/app.css`                   |
-| **CLI Scaffolding** | 7 make:feature:* commands                                         | `app/Console/Commands/`                   |
+| **CLI Scaffolding** | 7 make:feature:\* commands                                         | `app/Console/Commands/`                   |
 
 ---
 
@@ -1190,11 +1204,11 @@ Mail::to($user)->queue(new GeneralMail(
 
 #### GeneralMail Constructor Map
 
-| Parameter | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `mailSubject` | `string` | **Yes** | Sets the exact email subject line. |
-| `contentView` | `string` | **Yes** | The exact dot-notation Blade path for the template to render. |
-| `data` | `array` | No | An array of dynamic values injected into the Blade template layout. |
+| Parameter     | Type     | Required | Description                                                         |
+| :------------ | :------- | :------- | :------------------------------------------------------------------ |
+| `mailSubject` | `string` | **Yes**  | Sets the exact email subject line.                                  |
+| `contentView` | `string` | **Yes**  | The exact dot-notation Blade path for the template to render.       |
+| `data`        | `array`  | No       | An array of dynamic values injected into the Blade template layout. |
 
 ---
 
@@ -1211,31 +1225,33 @@ use App\Features\Notification\Events\NotificationCreated;
 
 // Dispatch from any Service or Controller
 event(new NotificationCreated(
-    user: $user, 
-    category: 'Security', 
-    title: 'Password Changed', 
+    user: $user,
+    category: 'Security',
+    title: 'Password Changed',
     message: 'Your account password has been updated.'
 ));
 ```
 
 #### NotificationCreated Event Map
 
-| Argument | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `user` | `User` | **Yes** | The Eloquent model instance of the user receiving the notification. |
-| `title` | `string` | **Yes** | The explicit bold summary title shown in the notification list. |
-| `message` | `string` | **Yes** | The detailed descriptive payload of the notification. |
+| Argument   | Type     | Required               | Description                                                                                      |
+| :--------- | :------- | :--------------------- | :----------------------------------------------------------------------------------------------- |
+| `user`     | `User`   | **Yes**                | The Eloquent model instance of the user receiving the notification.                              |
+| `title`    | `string` | **Yes**                | The explicit bold summary title shown in the notification list.                                  |
+| `message`  | `string` | **Yes**                | The detailed descriptive payload of the notification.                                            |
 | `category` | `string` | No (default: `system`) | Categorizes the notification for backend log aggregations (e.g. `Account`, `System`, `Billing`). |
 
 ### `CreateNotificationRecord` Listener
 
 The listener (`App\Features\Notification\Listeners\CreateNotificationRecord`) is automatically registered in `AppServiceProvider`. It handles:
+
 - **Queueing**: Implements `ShouldQueue` to run in the background.
 - **Role Detection**: Automatically routes notifications to `AdminNotification` or `UserNotification` tables based on the user's role.
 
 ### Creating New Feature Events
 
 To create a new event for a specific feature, use the scaffolder:
+
 ```bash
 php artisan make:feature:event {FeatureName} {EventName}
 ```
@@ -1247,12 +1263,16 @@ php artisan make:feature:event {FeatureName} {EventName}
 ## 🏗️ 19. Advanced Feature Patterns
 
 ### Independent User Models
-For complex role-based systems, Feature Kit recommends using **Feature-Specific User Models** (e.g., `App\Features\Profile\Admin\Models\User`). 
+
+For complex role-based systems, Feature Kit recommends using **Feature-Specific User Models** (e.g., `App\Features\Profile\Admin\Models\User`).
+
 - **Decoupling**: Prevents the core `App\Models\User` from becoming a "God Class".
 - **Specialization**: Allows adding role-specific scopes, accessors, and relationships without cluttering other parts of the app.
 
 ### Secure Private Storage & Modular Delivery
+
 Feature Kit implements a secure pattern for sensitive files like profile images:
+
 1. **Private Storage**: Files are stored in `storage/app/private/` (not publicly accessible via URL).
 2. **Modular Controller**: A dedicated `ProfileImageController` within the `Profile` feature serves these images.
 3. **Role-Aware Routing**: Secure routes (e.g., `/admin/profile-image`) are defined within the feature's `web.php`, ensuring users can only access their own files or authorized assets.
@@ -1279,26 +1299,27 @@ event(new ActivityLogged(
 ```
 
 The listener (`CreateActivityLogRecord`) captures:
+
 - `user_id` and polymorphic `subject_type`
 - The `action` keyword
 - Detailed `description`
-- `ip_address` and `user_agent` 
+- `ip_address` and `user_agent`
 
 ### Flexible UI Badges
 
 The Activity Logs UI automatically scales with your application. The `getActionMeta` utility on the frontend maps standard keywords inside your action strings to visually distinct badges.
 
-| Action Keyword Match | Badge Color | Description |
-| :--- | :--- | :--- |
-| `create`, `add`, `store` | **Green** | Best for resources being added to the database. |
-| `update`, `edit` | **Blue** | Best for standard modification of resources. |
-| `delete`, `remove`, `destroy` | **Red** | Best for destructive UI actions (deletion or archiving). |
-| `login`, `auth` | **Emerald** | Reserved for authentication milestones. |
-| `fail`, `error` | **Red** | Highlights failed transactions or exceptions. |
-| `password`, `security` | **Amber** | Critical for tracking sensitive user credential changes. |
-| `setting`, `config` | **Purple** | Settings or application environment modifications. |
-| `view`, `read`, `download`, `export` | **Indigo** | Best for read-only tracking or exporting artifacts. |
-| *No Match* | **Gray** | Automatic title-casing fallback for custom events. |
+| Action Keyword Match                 | Badge Color | Description                                              |
+| :----------------------------------- | :---------- | :------------------------------------------------------- |
+| `create`, `add`, `store`             | **Green**   | Best for resources being added to the database.          |
+| `update`, `edit`                     | **Blue**    | Best for standard modification of resources.             |
+| `delete`, `remove`, `destroy`        | **Red**     | Best for destructive UI actions (deletion or archiving). |
+| `login`, `auth`                      | **Emerald** | Reserved for authentication milestones.                  |
+| `fail`, `error`                      | **Red**     | Highlights failed transactions or exceptions.            |
+| `password`, `security`               | **Amber**   | Critical for tracking sensitive user credential changes. |
+| `setting`, `config`                  | **Purple**  | Settings or application environment modifications.       |
+| `view`, `read`, `download`, `export` | **Indigo**  | Best for read-only tracking or exporting artifacts.      |
+| _No Match_                           | **Gray**    | Automatic title-casing fallback for custom events.       |
 
 If no keyword matches, it gracefully transforms the action name (e.g., `invoice_generated`) into a readable format ("Invoice Generated") and categorizes it with a neutral gray badge.
 
@@ -1309,6 +1330,7 @@ If no keyword matches, it gracefully transforms the action name (e.g., `invoice_
 Feature Kit provides 4 scaffolded administration points, carefully isolated into feature domains and powered by thin-controller, thick-service architectures. Each hub perfectly illustrates how to execute complex logic without polluting controllers.
 
 ### 👥 1. User Management (`App\Features\UserManagement`)
+
 A comprehensive control center replacing basic scaffolding, wired to a dedicated `UserService`.
 
 - **Live Pagination & Search**: Automatically synchronizes UI parameters with Inertia queries.
@@ -1325,6 +1347,7 @@ if ($user->isDirty('is_active')) {
 ```
 
 ### ⚡ 2. UI Cache Management (`App\Features\CacheManagement`)
+
 A powerful, graphical representation for server configuration caching.
 
 - The `CacheService` prevents bloated controllers by extracting specific `Artisan::call()` mapping logic into dedicated helper methods.
@@ -1332,23 +1355,28 @@ A powerful, graphical representation for server configuration caching.
 - Utilizes the global `ModalContext` on the frontend before executing destructive Artisan commands.
 
 ### ❤️ 3. System Health Monitor (`App\Features\SystemHealth`)
+
 A visually striking "Live Metrics" dashboard analyzing the environment.
 
 Instead of performing connections inside the controller, the modular `HealthStatusService` runs runtime checks to fetch:
+
 1. **PDO SQL Integrity**: Verifying the current database connection is stable.
 2. **Caching Driver Latency**: Assessing if Redis/Memcached is responding quickly.
 3. **Hardware Config Constraints**: Reading `ini_get('memory_limit')` to warn about potential OOM issues.
 4. **Stack Diagnostics**: Displaying precise Laravel and PHP versions via `app()->version()` and `phpversion()`.
 
 ### 📊 4. Professional Dashboards (`App\Features\Dashboard`)
+
 Designed exclusively to prove the power of cleanly separating queries away from the HTTP layer.
 
-The logic is split into Role-Based folders (`Admin` and `User`). We strictly abstract metric queries and relation loads into their respective `AdminDashboardService` and `UserDashboardService`. 
+The logic is split into Role-Based folders (`Admin` and `User`). We strictly abstract metric queries and relation loads into their respective `AdminDashboardService` and `UserDashboardService`.
 
 #### The Admin Dashboard
+
 Tracks broad system performance overviews by calculating active vs suspended users, measuring total action milestones, and fetching the 10 most recent global `ActivityLogs` from across the entire app.
 
 #### The User Dashboard
+
 A personalized welcome hub that tracks the individual's exact `member_since` diff (e.g. "1 month ago"). It dynamically calculates a **Profile Completion Health** by evaluating fields like `profile_image`, `phone` and generates a responsive UI progress bar. Finally, it exposes a localized, private feed of their own event log history.
 
 ```php
@@ -1362,10 +1390,24 @@ public function index() {
 }
 ```
 
-### ⚙️ System Settings (Placeholder)
-`App\Features\SystemSettings` is an empty foundational structure wired into the `AdminLayout`, standing by for your app's custom global variable definitions.
+### ⚙️ 5. System Settings & Branding (`App\Features\SystemSettings`)
+
+The definitive hub for managing application identity and availability without touching code.
+
+- **Dynamic Branding**: Managed via `SettingsService`, allowing instant updates to the App Name, Logo (stored in `public/logo.png`), and Favicon.
+- **Favicon Engine**: Uses `FaviconUtil` (GD-powered) to convert any uploaded image into a professional 32x32 `.ico` file.
+- **Smart Maintenance Mode**: A custom middleware-based system (`CheckMaintenanceMode`) with:
+    - **Admin Bypass**: Keeps admins productive by allowing access to `/admin` and `/auth` routes.
+    - **Inertia Reload Logic**: Detects SPA requests and forces a full refresh to the maintenance page.
+    - **Custom 503 Page**: A premium, branded template showing the estimated duration.
+
+```php
+// Usage Pattern
+\App\Features\SystemSettings\Models\Setting::get('maintenance_duration', '15 mins');
+```
 
 ---
 
 ### Developed and Maintained by [Rifatxtra](https://rifatxtra.com).
+
 MIT Licensed. Open for everyone to scale.

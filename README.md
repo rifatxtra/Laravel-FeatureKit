@@ -1,8 +1,30 @@
-# 📦 rifatxtra/laravel-feature-kit (v2.1.1)
+# 📦 rifatxtra/laravel-feature-kit (v2.1.2)
 
 ### The Professional Laravel 12 Feature-Driven Starter Kit (Laravel Feature Kit).
 
 Built for developers who want to skip the "boring" setup and start building production-grade applications from day one.
+
+---
+
+## 🆕 What's New in v2.1.2
+
+### ⚙️ Dynamic System Settings & Branding
+You can now manage your application's identity and availability directly from the Admin Portal without touching a single line of code.
+
+- **Dynamic branding**: Change **App Name**, upload a **Logo**, and a **Favicon** instantly.
+- **Favicon Engine**: Automated GD-powered conversion of any image to a professional 32x32 `.ico` file.
+- **Smart Maintenance Mode**: 
+    - **Admin Bypass**: Keeps admins productive by allowing access to `/admin` and `/auth` routes during maintenance.
+    - **SPA Support**: Detects Inertia requests and forces a full reload to the branded 503 page.
+    - **Dynamic Duration**: Set estimated downtime from the UI, reflected on the maintenance page.
+- **Source of Truth**: All settings are cached indefinitely using `Setting::get($key, $default)` for maximum performance.
+
+#### 📂 New/Modified Files:
+- `app/Features/SystemSettings/` — Entire domain for settings logic.
+- `app/Core/Utils/FaviconUtil.php` — Image to ICO conversion utility.
+- `app/Core/Middleware/CheckMaintenanceMode.php` — Advanced maintenance gate.
+- `resources/views/errors/503.blade.php` — Premium branded downtime template.
+- `resources/js/pages/(portals)/admin/settings/page.jsx` — Interactive settings dashboard.
 
 ---
 

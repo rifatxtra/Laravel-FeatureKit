@@ -65,6 +65,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
+            \App\Core\Middleware\CheckMaintenanceMode::class,
             \App\Core\Middleware\HandleInertiaRequests::class,
         ]);
 

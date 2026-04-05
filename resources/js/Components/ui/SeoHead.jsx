@@ -1,5 +1,5 @@
 import React from "react";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
 export default function SeoHead({
     title,
@@ -8,16 +8,13 @@ export default function SeoHead({
     image,
     type = "website",
 }) {
-    // Props passed directly from the page component (which receives them from controller)
-
-    // We can still have some "smart" defaults if props are missing,
-    // but we won't rely on global app.seo anymore.
-    // Instead, we assume the controller passed the resolved final values
-    // OR we just use what is passed here.
+    const { props } = usePage();
+    const appName = props.app?.app_name || "Feature Kit";
+    const metaTitle = title ? `${title} | ${appName}` : appName;
 
     return (
         <Head>
-            {title && <title>{title}</title>}
+            <title>{metaTitle}</title>
             {description && <meta name="description" content={description} />}
             {keywords && <meta name="keywords" content={keywords} />}
 

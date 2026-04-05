@@ -4,6 +4,7 @@ namespace App\Core\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Features\SystemSettings\Models\Setting;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -68,10 +69,10 @@ class HandleInertiaRequests extends Middleware
             //'csrf_token' => csrf_token(),
 
             // App config — powers useAppConfig()
-            'app' => fn() => [
+            'app' => fn() => array_merge([
                 'name' => config('app.name'),
                 'env'  => config('app.env'),
-            ],
+            ], Setting::getAll()),
         ]);
     }
 }

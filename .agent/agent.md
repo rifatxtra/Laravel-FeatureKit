@@ -501,9 +501,16 @@ Use feature-specific models (e.g., `App\Features\Profile\Admin\Models\User`) to 
 ### Secure Private Storage
 Assets like profile images are stored in `storage/app/private/` and delivered via modular feature controllers (e.g., `ProfileImageController`).
 
+### ⚙️ System Settings & Branding (`App\Features\SystemSettings`)
+Core interface for dynamic app configuration.
+- **Models**: `Setting` (key/value with caching).
+- **Logic**: `SettingsService` (branded asset management), `FaviconUtil` (ICO conversion).
+- **Maintenance**: `CheckMaintenanceMode` middleware (Admin bypass + Inertia reload support).
+- **Usage**: `\App\Features\SystemSettings\Models\Setting::get($key, $default)`.
+
 ---
 
-## 📝 Naming & Path Conventions
+### 📝 Naming & Path Conventions
 
 | Thing | Convention | Example |
 |---|---|---|

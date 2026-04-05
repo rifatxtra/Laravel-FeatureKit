@@ -90,7 +90,7 @@ export default function UserLayout({ children }) {
                         >
                             <div className="relative w-10 h-10 flex-shrink-0">
                                 <img
-                                    src="/logo.png"
+                                    src={props.app?.app_logo || "/logo.png"}
                                     alt="Logo"
                                     className="w-full h-full object-contain rounded-xl"
                                     onError={(e) => {
@@ -100,7 +100,7 @@ export default function UserLayout({ children }) {
                                     }}
                                 />
                                 <div className="hidden absolute inset-0 bg-primary rounded-xl items-center justify-center text-white font-bold text-xl shadow-sm shadow-primary/30">
-                                    {props.app?.name ? props.app.name[0] : "A"}
+                                    {props.app?.app_name ? props.app.app_name[0] : "A"}
                                 </div>
                             </div>
 
@@ -108,7 +108,7 @@ export default function UserLayout({ children }) {
                                 className={`overflow-hidden transition-opacity duration-300 ${isSidebarExpanded ? "opacity-100" : "opacity-0 w-0"}`}
                             >
                                 <h1 className="font-bold text-lg text-white leading-tight truncate">
-                                    {props.app?.name || "Laravel App"}
+                                    {props.app?.app_name || "Laravel App"}
                                 </h1>
                             </div>
                         </div>

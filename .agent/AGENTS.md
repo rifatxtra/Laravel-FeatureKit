@@ -263,3 +263,4 @@ Before generating ANY code, verify:
 - [ ] Route is in the feature's `routes/` folder (not root)
 - [ ] Using semantic Tailwind tokens (not arbitrary colors)
 - [ ] Role-gated routes use `middleware('role:xxx')`
+- [ ] Global config uses `\App\Features\SystemSettings\Models\Setting::get()`

@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "name": "laravel-feature-kit",
-    "version": "v2.1.1",
+    "version": "v2.1.2",
     "description": "The professional Laravel 12 Feature-Driven Starter Kit (Laravel Feature Kit) with Inertia.js v2, React 19, and Tailwind CSS v4.",
     "keywords": [
         "laravel",

@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
         <div class="xl:grid xl:grid-cols-3 xl:gap-8">
             <div class="space-y-8 xl:col-span-1">
-                <img class="h-10 w-auto" src="{{ asset('logo.png') }}" alt="Logo">
+                <img class="h-10 w-auto" src="{{ \App\Features\SystemSettings\Models\Setting::get('app_logo', asset('logo.png')) }}" alt="Logo">
                 <p class="text-surface-foreground/60 text-base">
                     Making it easy to build feature-rich Laravel applications with a modern stack. Created by <a href="https://rifatxtra.com" target="_blank" class="text-primary hover:underline">rifatxtra</a>.
                 </p>
@@ -52,7 +52,7 @@
         </div>
         <div class="mt-12 border-t border-surface-foreground/10 pt-8">
             <p class="text-base text-surface-foreground/40 xl:text-center">
-                &copy; {{ date('Y') }} Laravel Feature Kit. All rights reserved.
+                &copy; {{ date('Y') }} {{ \App\Features\SystemSettings\Models\Setting::get('app_name', 'Laravel Feature Kit') }}. All rights reserved.
             </p>
         </div>
     </div>
