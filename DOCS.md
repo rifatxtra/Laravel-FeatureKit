@@ -1,4 +1,4 @@
-# 🚀 Laravel Feature Kit v2.1.2 — Complete Technical Documentation
+# 🚀 Laravel Feature Kit v2.2.0 — Complete Technical Documentation
 
 Welcome to the definitive guide for **Laravel Feature Kit (rifatxtra/laravel-feature-kit)**. This document covers every system, pattern, utility, and command in the project — no detail omitted.
 
@@ -35,6 +35,7 @@ Core interface for dynamic app configuration.
 18. [Advanced Feature Patterns (Independent Models & Private Storage)](#-18-advanced-feature-patterns)
 19. [Activity Logs System](#-19-activity-logs-system)
 20. [Core Administrative Hubs](#-20-core-administrative-hubs)
+21. [Traffic Analytics Console](#-21-traffic-analytics-console)
 
 ---
 
@@ -1411,3 +1412,198 @@ The definitive hub for managing application identity and availability without to
 ### Developed and Maintained by [Rifatxtra](https://rifatxtra.com).
 
 MIT Licensed. Open for everyone to scale.
+
+---
+
+## 📊 21. Traffic Analytics Console
+
+**Feature path:** `App\Features\TrafficAnalytics`
+
+The Traffic Analytics feature is a built-in, **full-stack analytics console** — a self-hosted alternative to Google Analytics that runs entirely within your Laravel application. No third-party service, no data leaving your server.
+
+### Architecture Overview
+
+```
+app/Features/TrafficAnalytics/
+├── Middleware/
+│   └── TrackTraffic.php         # Intercepts requests, captures timing & IP
+├── Jobs/
+│   └── ProcessTrafficLog.php    # Queue job: geo lookup, UA parsing, DB insert
+├── Models/
+│   └── TrafficLog.php           # Eloquent model with scopes & casts
+└── Admin/
+    ├── Controllers/
+    │   └── TrafficController.php # index(), logs(), realtime()
+    ├── Services/
+    │   └── TrafficAnalyticsService.php # 16 aggregation methods
+    └── routes/
+        └── web.php              # /admin/traffic, /admin/traffic/logs, /admin/traffic/realtime
+```
+
+### Database Schema (`traffic_logs` table)
+
+```sql
+id              BIGINT UNSIGNED AUTO_INCREMENT
+user_id         BIGINT NULLABLE (FK → users)
+session_id      VARCHAR(64) NULLABLE INDEX       -- sha256(IP|UA|date)
+ip_address      VARCHAR(45)
+uri             VARCHAR(2048)
+method          VARCHAR(10)
+status_code     SMALLINT DEFAULT 200 INDEX
+response_time   FLOAT NULLABLE                   -- milliseconds
+user_agent      TEXT NULLABLE
+browser         VARCHAR(100) NULLABLE
+os              VARCHAR(100) NULLABLE
+device_type     VARCHAR(50) NULLABLE
+referrer        TEXT NULLABLE
+country_code    CHAR(2) NULLABLE INDEX
+country_name    VARCHAR(100) NULLABLE
+is_bot          BOOLEAN DEFAULT false
+is_new_visitor  BOOLEAN DEFAULT true
+created_at      TIMESTAMP
+updated_at      TIMESTAMP
+```
+
+### Middleware: `TrackTraffic`
+
+Appended to the global `web` stack in `bootstrap/app.php`. Runs on every public request:
+
+1. Records `microtime(true)` before the request is processed.
+2. Passes the request through the rest of the middleware chain.
+3. Calculates `response_time` in milliseconds.
+4. Skips admin/api/ajax routes (only public page views are tracked).
+5. Resolves the **real visitor IP** — respects Cloudflare `CF-Connecting-IP`, nginx `X-Real-IP`, and `X-Forwarded-For` headers via Laravel's `trustProxies(at: '*')`.
+6. Builds a **privacy-safe session ID** by hashing `IP | UserAgent | date` — no cookies required.
+7. Dispatches `ProcessTrafficLog` to the queue for async processing.
+
+```php
+// bootstrap/app.php — required for correct IP detection behind proxies
+$middleware->trustProxies(at: '*');
+```
+
+### Job: `ProcessTrafficLog`
+
+Runs in the background queue. Performs:
+
+- **Geo lookup** via `http://ip-api.com/json/{ip}` (free, no API key, 45 req/min) — skips private/loopback IPs gracefully.
+- **New visitor detection** — checks if the IP has any prior records before today.
+- **Extended UA parsing** — detects Chrome, Firefox, Safari, Edge, Brave, Opera, Samsung Browser, UC Browser; Windows 10/11, macOS, iOS, Android, Linux, Chrome OS.
+- **Bot detection** — checks 20+ bot signatures including Googlebot, Bingbot, HeadlessChrome, PhantomJS.
+
+```php
+// Dispatched from middleware
+ProcessTrafficLog::dispatch([
+    'ip_address'    => $ip,
+    'session_id'    => $sessionId,
+    'status_code'   => $statusCode,
+    'response_time' => $responseTime,
+    // ...
+]);
+```
+
+### Service: `TrafficAnalyticsService`
+
+Contains all aggregation logic. The `getDashboardStats()` method returns 16 data sets:
+
+| Method / Data Key          | Description                                                         |
+| :------------------------- | :------------------------------------------------------------------ |
+| `visits_over_time`         | Daily page views, unique IPs, and sessions over the selected period |
+| `device_distribution`      | Desktop / Mobile / Tablet breakdown                                 |
+| `browser_distribution`     | Top 8 browsers by visit count                                       |
+| `os_distribution`          | Top 8 OS platforms by visit count                                   |
+| `top_pages`                | Top 10 most-visited URIs                                            |
+| `referrer_sources`         | Direct / Search / Social / Other categorized traffic                |
+| `heatmap`                  | 7×24 array — hit count per day-of-week × hour-of-day               |
+| `status_codes`             | 2xx / 3xx / 4xx / 5xx grouped HTTP status distribution              |
+| `geo_breakdown`            | Top 15 countries by visit count                                     |
+| `top_entry_pages`          | Top 5 pages by distinct session count                               |
+| `response_time_trend`      | Daily avg & max response time in milliseconds                       |
+| `recent_logs`              | Latest 20 visits with user relationship loaded                      |
+| `summary.bounce_rate`      | % of sessions with only 1 page view                                 |
+| `summary.avg_pages_session`| Average depth of each session                                       |
+| `summary.new_visitors`     | Distinct IPs flagged as first-time today                            |
+| `summary.avg_response_time`| Mean response time across all tracked requests                      |
+
+The separate `getRealTimeStats(int $minutes)` method is called by the REST polling endpoint:
+
+```php
+// Returns active visitors, per-minute sparkline, active pages, countries, hit stream
+$data = $this->trafficService->getRealTimeStats(minutes: 5);
+```
+
+### Controller Routes
+
+```
+GET /admin/traffic              → TrafficController@index    (dashboard)
+GET /admin/traffic/logs         → TrafficController@logs     (paginated log viewer)
+GET /admin/traffic/realtime     → TrafficController@realtime (JSON — REST poll)
+```
+
+### Dashboard UI: 3-Tab Console
+
+**Tab 1 — Overview**
+- KPI row: Page Views, Unique IPs, Sessions, Avg Response, 4xx Errors, 5xx Errors
+- Secondary metrics: Bounce Rate, Pages/Session, New Visitors, Bot Traffic
+- Visitor Trends area chart (page views + sessions)
+- Device donut chart
+- New vs Returning visitor donut
+- Traffic Sources progress bars (Direct / Search / Social / Other)
+- HTTP Status Code breakdown
+- Browser usage horizontal bar chart
+- Top Pages ranked list
+- Recent Hits table with inline detail modal
+
+**Tab 2 — Real-Time** *(polls every 15 seconds via `fetch`)*
+- Hero: live Active Visitors count with pulsing indicator
+- Req/sec, Pages Live, Active Countries KPIs
+- 30-minute traffic sparkline chart
+- Pages Being Viewed list
+- Active Countries list with flag emojis
+- Live Hit Stream table (IP, country, browser, status, timestamp)
+
+**Tab 3 — Behavior**
+- Response Time Trend line chart (avg + max per day)
+- 7×24 Traffic Heatmap (intensity grid, color-coded)
+- OS Distribution progress bars
+- Top Countries ranked list with flag emojis and bar indicator
+- Top Entry Pages (by session count)
+
+### Real-Time Polling Strategy
+
+To avoid the overhead of WebSockets or Server-Sent Events, the Real-Time tab uses **REST polling**:
+
+```javascript
+// In page.jsx — starts when Real-Time tab is active, clears on tab switch
+useEffect(() => {
+    if (activeTab === 'realtime') {
+        fetchRealtime(); // immediate first load
+        rtIntervalRef.current = setInterval(fetchRealtime, 15000); // then every 15s
+    } else {
+        clearInterval(rtIntervalRef.current);
+    }
+    return () => clearInterval(rtIntervalRef.current);
+}, [activeTab]);
+```
+
+### Filtering
+
+Both the dashboard and logs viewer support URL-parameter based filtering:
+
+| Filter       | Effect                                                  |
+| :----------- | :------------------------------------------------------ |
+| `days`       | Date range: 1, 7, 30, 90, or 0 (All Time)              |
+| `uri`        | Filter by URI path substring                            |
+| `is_bot`     | Include or exclude detected bots                        |
+| `device_type`| Filter logs by Desktop / Mobile / Tablet (logs only)   |
+| `status_code`| Filter logs by exact HTTP status code (logs only)       |
+| `country_code` | Filter logs by ISO country code (logs only)           |
+
+### TrafficLog Model Scopes
+
+```php
+TrafficLog::realUsers()          // excludes is_bot = true
+TrafficLog::newVisitors()        // is_new_visitor = true
+TrafficLog::returningVisitors()  // is_new_visitor = false
+TrafficLog::successful()         // status_code 200–299
+TrafficLog::errors()             // status_code >= 400
+```

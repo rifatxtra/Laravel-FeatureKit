@@ -1,7 +1,7 @@
 @extends('pages.layout')
 
 @section('title', 'Documentation - Laravel Feature Kit')
-@section('description', 'Complete technical documentation for Laravel Feature Kit v2.1.1. Architecture, utilities, commands, and more.')
+@section('description', 'Complete technical documentation for Laravel Feature Kit v2.2.0. Architecture, utilities, traffic analytics console, and more.')
 @section('keywords', 'Laravel Documentation, Feature Kit Docs, API Guide, Technical Docs, Framework Reference')
 @section('og_title', 'Documentation - Laravel Feature Kit')
 @section('og_description', 'Master the Laravel Feature Kit with our comprehensive technical documentation and guides.')
@@ -49,6 +49,7 @@
                         <li><a href="#notifications" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Notification System</a></li>
                         <li><a href="#activity-logs" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Activity Logs</a></li>
                         <li><a href="#admin-hubs" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Admin Hubs</a></li>
+                        <li><a href="#traffic-analytics" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Traffic Analytics</a></li>
                         <li><a href="#ui-kit" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">React UI Kit</a></li>
                         <li><a href="#system-settings" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">System Settings</a></li>
                         <li><a href="#utilities" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">JS Utility Suite</a></li>
@@ -500,6 +501,86 @@ public function index() {
         'recent_activity' => $this->dashboardService->getRecentActivity($user, 10)
     ]);
 }</code></pre>
+                </section>
+
+                {{-- TRAFFIC ANALYTICS --}}
+                <section id="traffic-analytics" class="mt-16 border-t border-surface-foreground/10 pt-10">
+                    <h2 class="text-3xl font-extrabold text-foreground mb-6">📊 Traffic Analytics Console</h2>
+                    <p>Feature Kit includes a built-in, <strong>full-stack analytics console</strong> — a self-hosted alternative to Google Analytics that runs entirely within your Laravel application. No third-party service, no data leaving your server.</p>
+
+                    <h3 class="text-xl font-bold text-foreground mt-10 mb-4">3-Tab Dashboard</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">📋 Overview Tab</span>
+                            <p class="text-xs opacity-60 mt-1">KPIs, visitor trends, device/browser breakdown, traffic sources, status codes, top pages, recent hits</p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">⚡ Real-Time Tab</span>
+                            <p class="text-xs opacity-60 mt-1">Live active visitors, hit stream, pages being viewed, active countries — REST-polled every 15 seconds</p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">🧠 Behavior Tab</span>
+                            <p class="text-xs opacity-60 mt-1">Response time trends, 7×24 traffic heatmap, OS breakdown, geographic distribution, entry pages</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-foreground mt-10 mb-4">Key Metrics Captured</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">🌍 Geo Detection</span>
+                            <p class="text-xs opacity-60 mt-1">Country code & name via <code>ip-api.com</code> — no API key, no PHP packages, free up to 45 req/min</p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">🔒 Session Tracking</span>
+                            <p class="text-xs opacity-60 mt-1">Privacy-safe session ID from <code>hash('sha256', IP | UA | date)</code> — no cookies, GDPR-friendly</p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">⏱️ Response Time</span>
+                            <p class="text-xs opacity-60 mt-1">Per-request timing in milliseconds via <code>microtime(true)</code> with daily trend charts</p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">📡 Real IP Resolution</span>
+                            <p class="text-xs opacity-60 mt-1">Correctly identifies visitor IPs behind Cloudflare, nginx, and load balancers via <code>trustProxies</code></p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">📊 Session Analytics</span>
+                            <p class="text-xs opacity-60 mt-1">Bounce rate, pages/session, new vs returning visitors — all computed without a third-party cookie</p>
+                        </div>
+                        <div class="p-4 bg-surface rounded-xl border border-surface-foreground/5">
+                            <span class="text-sm font-bold text-primary">🤖 Bot Detection</span>
+                            <p class="text-xs opacity-60 mt-1">20+ bot signatures detected and excluded from human traffic charts (Googlebot, Bingbot, HeadlessChrome…)</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-foreground mt-10 mb-4">Architecture</h3>
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner my-6"><code>// 1. Middleware captures the request (sync, zero DB writes)
+TrackTraffic::handle() → ProcessTrafficLog::dispatch([...])
+
+// 2. Queue job does the heavy lifting (async)
+ProcessTrafficLog::handle()
+├── Geo lookup    → ip-api.com (skips private IPs)
+├── UA parsing    → browser, OS, device_type, is_bot
+├── New visitor   → checks if IP seen before today
+└── DB insert     → traffic_logs table
+
+// 3. Routes for the admin console
+GET /admin/traffic              → dashboard (3 tabs)
+GET /admin/traffic/logs         → paginated log viewer
+GET /admin/traffic/realtime     → JSON REST endpoint (polling)</code></pre>
+
+                    <h3 class="text-xl font-bold text-foreground mt-8 mb-4">Proxy Configuration</h3>
+                    <p class="text-sm opacity-80 mb-4">For accurate IP tracking in production (behind Cloudflare or nginx), Feature Kit configures Laravel's trusted proxies in <code>bootstrap/app.php</code>:</p>
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner"><code>// bootstrap/app.php
+$middleware->trustProxies(at: '*');
+// Makes $request->ip() return the real visitor IP automatically.
+// CF-Connecting-IP, X-Real-IP, X-Forwarded-For are all handled.</code></pre>
+
+                    <h3 class="text-xl font-bold text-foreground mt-8 mb-4">TrafficLog Model Scopes</h3>
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner"><code>TrafficLog::realUsers()          // excludes bots
+TrafficLog::newVisitors()        // is_new_visitor = true
+TrafficLog::returningVisitors()  // is_new_visitor = false
+TrafficLog::successful()         // status_code 200–299
+TrafficLog::errors()             // status_code >= 400</code></pre>
                 </section>
 
                 {{-- UI COMPONENT KIT --}}

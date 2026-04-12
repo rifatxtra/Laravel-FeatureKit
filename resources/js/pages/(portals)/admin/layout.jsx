@@ -18,6 +18,8 @@ import {
     Activity,
     History,
     ShoppingCart,
+    BarChart3,
+    FileText,
 } from "lucide-react";
 
 import MainLayout from "../../../Components/Layout/MainLayout";
@@ -70,6 +72,11 @@ export default function AdminLayout({ children }) {
             name: "Activity Logs",
             href: "/admin/activity-logs",
             icon: History,
+        },
+        {
+            name: "Traffic Analytics",
+            href: "/admin/traffic",
+            icon: BarChart3,
         },
     ];
 

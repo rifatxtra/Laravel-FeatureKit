@@ -1,7 +1,7 @@
 @extends('pages.layout')
 
 @section('title', 'Features - Laravel Feature Kit')
-@section('description', 'Discover every feature in Laravel Feature Kit v2.1.2. Feature-Driven Architecture, React 19, 20+ hooks, 11 utilities, 7 Artisan commands, and more.')
+@section('description', 'Discover every feature in Laravel Feature Kit v2.2.0. Feature-Driven Architecture, React 19, 20+ hooks, 11 utilities, 7 Artisan commands, analytics console, and more.')
 @section('keywords', 'Laravel Features, Feature-Driven Architecture, React 19, Inertia.js, Laravel Utilities, SaaS Features')
 @section('og_title', 'Features - Laravel Feature Kit')
 @section('og_description', 'Explore the powerful feature-driven architecture and pre-built systems of Laravel Feature Kit.')
@@ -118,7 +118,7 @@
         <div class="text-center mb-12">
             <h2 class="text-3xl font-extrabold text-foreground sm:text-4xl mb-4">Everything Included</h2>
             <p class="max-w-2xl mx-auto text-lg text-surface-foreground/60">
-                A deep look at every system that ships with Feature Kit v2.1.2.
+                A deep look at every system that ships with Feature Kit v2.2.0.
             </p>
         </div>
 
@@ -330,6 +330,29 @@
                 </div>
                 <h3 class="text-xl font-bold text-foreground mb-2">Smart Maintenance Mode</h3>
                 <p class="text-sm text-surface-foreground/60">A failsafe maintenance system with Admin bypass logic. Keep your team productive while visitors see a premium, branded 503 countdown page. Managed via custom middleware.</p>
+            </div>
+            {{-- Feature 20: Traffic Analytics Console --}}
+            <div class="relative p-6 bg-surface rounded-2xl border border-primary/20 bg-primary/5 shadow-sm hover:shadow-md transition-shadow col-span-full md:col-span-2 lg:col-span-3">
+                <div class="flex items-start gap-4">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-xl bg-primary text-white shadow-lg mb-4 shrink-0">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h3 class="text-xl font-bold text-foreground">Traffic Analytics Console</h3>
+                            <span class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">NEW v2.2.0</span>
+                        </div>
+                        <p class="text-sm text-surface-foreground/60 mb-4">A professional-grade, self-hosted analytics console — a free Google Analytics alternative running entirely in your own app. Includes geo-tracking, session analytics, real-time visitor monitoring, 7×24 traffic heatmap, HTTP status code breakdown, response time trends, and a 3-tab admin dashboard.</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div class="text-xs bg-white rounded-lg px-3 py-2 border border-gray-100"><span class="font-bold text-primary">📋 Overview</span><br>KPIs, charts, top pages</div>
+                            <div class="text-xs bg-white rounded-lg px-3 py-2 border border-gray-100"><span class="font-bold text-primary">⚡ Real-Time</span><br>Live hits, 15s polling</div>
+                            <div class="text-xs bg-white rounded-lg px-3 py-2 border border-gray-100"><span class="font-bold text-primary">🧠 Behavior</span><br>Heatmap, response times</div>
+                            <div class="text-xs bg-white rounded-lg px-3 py-2 border border-gray-100"><span class="font-bold text-primary">🌍 Geo</span><br>Country flags, breakdown</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

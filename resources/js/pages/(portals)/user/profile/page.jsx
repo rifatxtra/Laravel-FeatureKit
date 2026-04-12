@@ -1,6 +1,6 @@
 import React from "react";
 import UserLayout from "@/pages/(portals)/user/layout";
-import { useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { User, Mail, Phone, Camera, Save, Loader2 } from "lucide-react";
 
 export default function Page() {
@@ -24,6 +24,7 @@ export default function Page() {
 
     return (
         <UserLayout>
+            <Head title='Profile'/>
             <div className="max-w-4xl mx-auto py-8 text-gray-700">
                 <div className="mb-8">
                     <h1 className="text-2xl font-bold text-gray-900 font-sans">Profile Settings</h1>

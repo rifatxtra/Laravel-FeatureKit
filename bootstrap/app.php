@@ -64,9 +64,15 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Trust all proxies so X-Forwarded-For / CF-Connecting-IP are resolved correctly.
+        // This makes $request->ip() return the real visitor IP even behind nginx or Cloudflare.
+        // You can restrict to specific proxy IPs in production: e.g. ['203.0.113.1']
+        $middleware->trustProxies(at: '*');
+
         $middleware->web(append: [
             \App\Core\Middleware\CheckMaintenanceMode::class,
             \App\Core\Middleware\HandleInertiaRequests::class,
+            \App\Features\TrafficAnalytics\Middleware\TrackTraffic::class,
         ]);
 
         // Middleware aliases
