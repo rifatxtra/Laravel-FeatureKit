@@ -8,76 +8,22 @@ use Illuminate\Support\Facades\File;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
         health: '/up',
-        using: function () {
-            $featuresPath = app_path('Features');
-
-            if (! File::isDirectory($featuresPath)) {
-                return;
-            }
-
-            foreach (File::directories($featuresPath) as $featurePath) {
-                $hasRoleRoutes = false;
-
-                // Check subdirectories for role-based features (Dashboard/Admin, Dashboard/User)
-                foreach (File::directories($featurePath) as $subPath) {
-                    $webRoute = $subPath . '/routes/web.php';
-                    $apiRoute = $subPath . '/routes/api.php';
-
-                    if (File::exists($webRoute) || File::exists($apiRoute)) {
-                        $hasRoleRoutes = true;
-                        $role          = strtolower(basename($subPath));
-
-                        if (File::exists($webRoute)) {
-                            Route::middleware('web')
-                                ->prefix($role)
-                                ->name($role . '.')
-                                ->group($webRoute);
-                        }
-
-                        if (File::exists($apiRoute)) {
-                            Route::middleware('api')
-                                ->prefix('api/' . $role)
-                                ->name('api.' . $role . '.')
-                                ->group($apiRoute);
-                        }
-                    }
-                }
-
-                // Simple feature (Auth, Notification, etc.)
-                if (! $hasRoleRoutes) {
-                    $webRoute = $featurePath . '/routes/web.php';
-                    $apiRoute = $featurePath . '/routes/api.php';
-
-                    if (File::exists($webRoute)) {
-                        Route::middleware('web')
-                            ->group($webRoute);
-                    }
-
-                    if (File::exists($apiRoute)) {
-                        Route::middleware('api')
-                            ->prefix('api')
-                            ->group($apiRoute);
-                    }
-                }
-            }
-        },
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Trust all proxies so X-Forwarded-For / CF-Connecting-IP are resolved correctly.
-        // This makes $request->ip() return the real visitor IP even behind nginx or Cloudflare.
-        // You can restrict to specific proxy IPs in production: e.g. ['203.0.113.1']
         $middleware->trustProxies(at: '*');
 
         $middleware->web(append: [
-            \App\Core\Middleware\CheckMaintenanceMode::class,
-            \App\Core\Middleware\HandleInertiaRequests::class,
-            \App\Features\TrafficAnalytics\Middleware\TrackTraffic::class,
+            \App\Http\Middleware\CheckMaintenanceMode::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\TrackTraffic::class,
         ]);
 
-        // Middleware aliases
         $middleware->alias([
-            'role' => \App\Core\Middleware\RoleMiddleware::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

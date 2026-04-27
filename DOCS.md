@@ -1,90 +1,70 @@
-# 🚀 Laravel Feature Kit v2.2.0 — Complete Technical Documentation
+# 🚀 Laravel Feature Kit v3.0.0 — Complete Technical Documentation
 
 Welcome to the definitive guide for **Laravel Feature Kit (rifatxtra/laravel-feature-kit)**. This document covers every system, pattern, utility, and command in the project — no detail omitted.
 
-### ⚙️ System Settings & Branding (`App\Features\SystemSettings`)
+### ⚙️ System Settings & Branding
 
 Core interface for dynamic app configuration.
 
 - **Models**: `Setting` (key/value with caching).
 - **Logic**: `SettingsService` (branded asset management), `FaviconUtil` (ICO conversion).
 - **Maintenance**: `CheckMaintenanceMode` middleware (Admin bypass + Inertia reload support).
-- **Usage**: `\App\Features\SystemSettings\Models\Setting::get($key, $default)`.
+- **Usage**: `\App\Models\Setting::get($key, $default)`.
 
 ---
 
 ## Table of Contents
 
-1. [Architecture: Feature-Driven Design](#-1-architecture-feature-driven-design-fdd)
-2. [Core Layer (`app/Core/`)](#-2-core-layer)
-3. [Routing Engine](#-3-automatic-route-discovery-engine)
+1. [Architecture: Professional MVC](#-1-architecture-professional-mvc)
+2. [Core Infrastructure](#-2-core-infrastructure)
+3. [Routing System](#-3-routing-system)
 4. [Frontend: Hybrid Strategy](#-4-frontend-hybrid-strategy)
 5. [React UI Component Kit](#-5-react-ui-component-kit)
 6. [Context System (Global State)](#-6-context-system)
 7. [Custom React Hooks Library](#-7-custom-react-hooks-library)
 8. [JavaScript Utility Suite](#-8-javascript-utility-suite)
 9. [Modern Mailing System](#-9-modern-mailing-system)
-10. [Auth Feature (Reference Implementation)](#-10-auth-feature-reference-implementation)
+10. [Auth Role](#-10-auth-role)
 11. [Landing Feature](#-11-landing-feature)
-12. [Command-Line Scaffolding](#-12-command-line-scaffolding)
-13. [Tailwind CSS v4 Design System](#-13-tailwind-css-v4-design-system)
-14. [Dev Environment & Scripts](#-14-dev-environment--scripts)
-15. [Database & Migrations](#-15-database--migrations)
-16. [Quick Reference Table](#-16-quick-reference-table)
-17. [Unified Notification System](#-17-unified-notification-system)
-18. [Advanced Feature Patterns (Independent Models & Private Storage)](#-18-advanced-feature-patterns)
-19. [Activity Logs System](#-19-activity-logs-system)
-20. [Core Administrative Hubs](#-20-core-administrative-hubs)
-21. [Traffic Analytics Console](#-21-traffic-analytics-console)
+12. [Tailwind CSS v4 Design System](#-12-tailwind-css-v4-design-system)
+13. [Dev Environment & Scripts](#-13-dev-environment--scripts)
+14. [Database & Migrations](#-14-database--migrations)
+15. [Quick Reference Table](#-15-quick-reference-table)
+16. [Unified Notification System](#-16-unified-notification-system)
+17. [Advanced Development Patterns](#-17-advanced-development-patterns)
+18. [Activity Logs System](#-18-activity-logs-system)
+19. [Core Administrative Hubs](#-19-core-administrative-hubs)
+20. [Traffic Analytics Console](#-20-traffic-analytics-console)
 
 ---
 
-## 🏛️ 1. Architecture: Feature-Driven Design (FDD)
+## 🏛️ 1. Architecture: Professional MVC
 
-Traditional Laravel projects scatter logic across `app/Http/Controllers`, `app/Models`, `app/Services`, etc. As the project grows, finding related files becomes a nightmare. Feature Kit solves this with **Feature-Driven Design**.
+Laravel Feature Kit follows a **Professional MVC** (Model-View-Controller) architecture, organized by **Role** rather than by feature. This approach provides the best balance between clean separation of concerns and standard Laravel conventions.
 
-### How It Works
+### Folder Structure
 
-Every business domain lives in `app/Features/{Name}/` as a self-contained unit:
-
-```
-app/Features/Payment/
-├── Controllers/          # HTTP layer (thin, delegates to Services)
-├── Services/             # Business logic (the "brain")
-├── Models/               # Feature-specific Eloquent models
-├── Requests/             # Form Request validation classes
-├── Observers/            # Model lifecycle hooks
-├── Events/               # Domain events
-├── Exceptions/           # Feature-specific exceptions
-└── routes/
-    ├── web.php           # Auto-discovered web routes
-    └── api.php           # Auto-discovered API routes
-```
-
-### Simple vs. Role-Based Features
-
-**Simple Feature** (e.g., Auth, Landing, Notification):
+The backend is organized into standard Laravel directories, with subdirectories for `Admin`, `User`, and `Auth` roles where applicable.
 
 ```
-app/Features/Auth/
-├── Controllers/
-├── Services/
-├── Models/
-└── routes/web.php       # Route prefix: none (registered at root)
-```
-
-**Role-Based Feature** (e.g., Dashboard with Admin & User roles):
-
-```
-app/Features/Dashboard/
-├── Admin/
+app/
+├── Http/
 │   ├── Controllers/
-│   ├── Services/
-│   └── routes/web.php   # Route prefix: /admin, name prefix: admin.
-└── User/
-    ├── Controllers/
-    ├── Services/
-    └── routes/web.php   # Route prefix: /user, name prefix: user.
+│   │   ├── Admin/        # Admin-only logic
+│   │   ├── User/         # Regular user logic
+│   │   ├── Auth/         # Authentication logic
+│   │   └── Landing/      # Public landing pages
+│   ├── Requests/
+│   │   ├── Admin/
+│   │   ├── User/
+│   │   └── Auth/
+│   └── Middleware/       # Global & Role-based middleware
+├── Services/             # 🧠 Business Logic (The brain of the app)
+│   ├── Admin/
+│   ├── User/
+│   └── Auth/
+├── Models/               # 🗄️ Single source of truth for data
+└── Utils/                # Helper classes & utilities
 ```
 
 ### Thin Controller + Service Pattern
@@ -92,15 +72,7 @@ app/Features/Dashboard/
 Controllers have **one job**: translate HTTP requests. All business logic lives in Services.
 
 ```php
-// ❌ BAD: Fat controller with business logic
-public function store(Request $request) {
-    $user = User::create([...]);
-    Mail::to($user)->send(...);
-    event(new UserRegistered($user));
-    return redirect('/dashboard');
-}
-
-// ✅ GOOD: Thin controller delegating to a service
+// ✅ Thin controller delegating to a service
 public function store(RegisterRequest $request, RegisterService $service) {
     $service->register($request->validated());
     return redirect()->intended(route('home.index'));
@@ -108,22 +80,21 @@ public function store(RegisterRequest $request, RegisterService $service) {
 ```
 
 ```php
-// app/Features/Auth/Services/RegisterService.php
-namespace App\Features\Auth\Services;
+// app/Services/Auth/RegisterService.php
+namespace App\Services\Auth;
 
-use App\Core\BaseService;
-use App\Features\Auth\Models\User;
+use App\Services\Service;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class RegisterService extends BaseService
+class RegisterService extends Service
 {
     public function register(array $data): User
     {
         $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
-            'phone'    => $data['phone'] ?? null,
             'password' => Hash::make($data['password']),
         ]);
 
@@ -133,89 +104,45 @@ class RegisterService extends BaseService
 }
 ```
 
-### Key Benefit: Feature Isolation
+### Models: Single Source of Truth
 
-Deleting a feature is as easy as deleting its folder. No hunting for scattered files across the project.
+Unlike FDD where models might be duplicated or hidden in feature folders, all models in Feature Kit live in `app/Models/`. This ensures that relationships and global scopes are easy to manage.
 
 ---
 
-## 🧱 2. Core Layer
+## 🧱 2. Core Infrastructure
 
-The `app/Core/` directory provides standardized base classes that power all features.
+Feature Kit provides standardized base classes and middleware in standard Laravel locations.
 
-### `BaseController`
+### `Controller.php`
 
-All feature controllers extend this. It provides the `ApiResponseTrait` automatically.
+**Location:** `app/Http/Controllers/Controller.php`
 
-```php
-namespace App\Core;
-
-use Illuminate\Routing\Controller;
-use App\Core\Traits\ApiResponseTrait;
-
-abstract class BaseController extends Controller
-{
-    use ApiResponseTrait;
-}
-```
+All controllers extend this base class, which includes the `ApiResponseTrait`.
 
 ### `ApiResponseTrait`
 
-Standardized JSON responses for consistent API output:
+**Location:** `app/Traits/ApiResponseTrait.php`
 
-```php
-// Available methods:
-$this->success($data, 'Fetched successfully');
-// → { "success": true, "message": "Fetched successfully", "data": [...] } (200)
+Standardized JSON responses for consistent API output.
 
-$this->error('Something went wrong', $errors, 400);
-// → { "success": false, "message": "Something went wrong", "errors": [...] } (400)
+### `Service.php`
 
-$this->created($data, 'Created successfully');
-// → { "success": true, "message": "Created successfully", "data": [...] } (201)
+**Location:** `app/Services/Service.php`
 
-$this->noContent();
-// → null (204)
-```
+Abstract base for all services.
 
-### `BaseService`
+### Core Middleware
 
-Abstract base for all domain services. Extend this for any business logic class:
-
-```php
-namespace App\Core;
-
-abstract class BaseService
-{
-    //
-}
-```
-
-### `BaseException`
-
-Custom exception base for feature-specific exceptions:
-
-```php
-namespace App\Core\Exceptions;
-
-use Exception;
-
-class BaseException extends Exception
-{
-    public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
-    }
-}
-```
-
-### Core Middleware (`app/Core/Middleware/`)
-
-Two middleware classes are registered in `bootstrap/app.php`:
+**Location:** `app/Http/Middleware/`
 
 #### `HandleInertiaRequests`
 
-Appended to the `web` middleware stack. Shares data to **every Inertia page** automatically:
+Appended to the `web` middleware stack. Shares data to **every Inertia page** automatically.
+
+#### `RoleMiddleware`
+
+Registered as alias `'role'`. Gates routes by the authenticated user's role.
 
 | Shared Key   | Type      | Powers                                               |
 | :----------- | :-------- | :--------------------------------------------------- | ------------------------------------------------- |
@@ -253,68 +180,37 @@ Unauthenticated users are redirected to login. Unauthorized users receive a `403
 
 ---
 
-## 🗺️ 3. Automatic Route Discovery Engine
+## 🗺️ 3. Routing System
 
-**Location:** `bootstrap/app.php`
+**Location:** `routes/web.php` and `routes/api.php`
 
-The routing engine scans `app/Features/` at boot and automatically registers all routes — no manual `Route::group()` needed.
+Feature Kit uses explicit, centralized routing. This is more performant and easier to debug than auto-discovery engines.
 
-### How Discovery Works
+### Route Organization
 
-1. The engine iterates all directories in `app/Features/`.
-2. For each feature, it checks subdirectories for **role-based routing** (e.g., `Dashboard/Admin/routes/web.php`).
-3. Role-based routes get **automatic URL prefix and name prefix** based on the role folder name:
-    - `Dashboard/Admin/routes/web.php` → prefix `/admin`, names `admin.*`
-    - `Dashboard/Admin/routes/api.php` → prefix `/api/admin`, names `api.admin.*`
-4. If no role subdirectories are found, it registers as a **simple feature** (no prefix).
-
-### Discovery Algorithm
+Routes are organized using `Route::group()` with role-based prefixes and middleware.
 
 ```php
-foreach (File::directories($featuresPath) as $featurePath) {
-    $hasRoleRoutes = false;
+// Admin Portal
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // ...
+});
 
-    // Check for role-based sub-features
-    foreach (File::directories($featurePath) as $subPath) {
-        $role = strtolower(basename($subPath)); // e.g., "admin"
-
-        if (File::exists("$subPath/routes/web.php")) {
-            Route::middleware('web')
-                ->prefix($role)              // /admin
-                ->name("$role.")             // admin.
-                ->group("$subPath/routes/web.php");
-            $hasRoleRoutes = true;
-        }
-
-        if (File::exists("$subPath/routes/api.php")) {
-            Route::middleware('api')
-                ->prefix("api/$role")        // /api/admin
-                ->name("api.$role.")         // api.admin.
-                ->group("$subPath/routes/api.php");
-            $hasRoleRoutes = true;
-        }
-    }
-
-    // Simple feature fallback
-    if (!$hasRoleRoutes) {
-        if (File::exists("$featurePath/routes/web.php")) {
-            Route::middleware('web')->group("$featurePath/routes/web.php");
-        }
-        if (File::exists("$featurePath/routes/api.php")) {
-            Route::middleware('api')->prefix('api')->group("$featurePath/routes/api.php");
-        }
-    }
-}
+// User Portal
+Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // ...
+});
 ```
 
-### Adding Middleware
+### Trusted Proxies
 
-The bootstrap file includes a prepared middleware hook:
+Configured in `bootstrap/app.php` to ensure real IP resolution (Cloudflare, nginx) works out of the box for traffic analytics.
 
 ```php
 ->withMiddleware(function (Middleware $middleware) {
-    // Add middleware aliases here e.g:
-    // $middleware->alias(['role' => \App\Core\Middleware\RoleMiddleware::class]);
+    $middleware->trustProxies(at: '*');
 })
 ```
 
@@ -345,7 +241,7 @@ Used for: **Landing page, Documentation page, Features page, Auth forms.**
 @endsection
 ```
 
-### SPA Layer (Inertia.js v2 + React 19)
+### SPA Layer (Inertia.js v3 + React 19)
 
 Used for: **Admin and User Portals (dashboards, internal tools).**
 
@@ -840,10 +736,15 @@ Every email rendered via `GeneralMail` automatically wraps in a professional Mar
 
 ---
 
-## 🔐 10. Auth Feature (Reference Implementation)
+## 🔑 10. Auth Role
 
-The Auth feature is a **complete, working implementation** demonstrating all Feature Kit patterns.
-The `app/Features/Auth/` directory serves as the benchmark for how all features should be built.
+Feature Kit includes a complete authentication system organized in `app/Http/Controllers/Auth`, `app/Services/Auth`, and `app/Http/Requests/Auth`.
+
+- **Controllers**: `LoginController`, `RegisterController`, `ForgotPasswordController`.
+- **Services**: `LoginService`, `RegisterService`, `ForgotPasswordService`.
+- **Requests**: `LoginRequest`, `RegisterRequest`.
+- **Views**: Standard Blade views in `resources/views/pages/auth/`.
+- **Routes**: Explicitly defined in `routes/web.php`.
 
 ### Controllers
 
@@ -872,13 +773,9 @@ The `app/Features/Auth/` directory serves as the benchmark for how all features 
 | `LoginRequest`    | `email` (required, email), `password` (required), `remember` (boolean)                                           |
 | `RegisterRequest` | `name` (max:255), `email` (unique:users), `phone` (max:20), `password` (confirmed, defaults), `terms` (accepted) |
 
-### User Model
+### Models
 
-Located at `app/Features/Auth/Models/User.php` — extends `Authenticatable`:
-
-- **Fillable:** `name`, `email`, `phone`, `password`
-- **Hidden:** `password`, `remember_token`
-- **Casts:** `email_verified_at` (datetime), `password` (hashed)
+The `User` model lives in `app/Models/User.php`. It is the central authority for authentication and authorization.
 
 ### Routes
 
@@ -935,99 +832,7 @@ POST   /auth/reset-password    → ForgotPasswordController@reset(password.updat
 
 ---
 
-## ⚙️ 12. Command-Line Scaffolding
 
-7 custom Artisan commands for generating feature components with flexible positional arguments.
-
-### `make:feature`
-
-```bash
-# Simple Feature
-php artisan make:feature {Name}
-# Example: php artisan make:feature Blog
-
-# Role-Based Feature (using arguments)
-php artisan make:feature {Name} {Roles...}
-# Example: php artisan make:feature Dashboard Admin User
-
-# Role-Based Feature (using option)
-php artisan make:feature {Name} --roles=Admin,User
-```
-
-**What it does:**
-
-- Creates feature root in `app/Features/{Name}/`
-- Scaffolds 8 directories: `Controllers/`, `Models/`, `Services/`, `Requests/`, `Observers/`, `Events/`, `Exceptions/`, `routes/`
-- For role-based features, mirrors this structure inside each `{Role}/` folder.
-- Generates `.gitkeep` in every folder and ready-to-use `web.php`/`api.php` stubs.
-
-### Sub-Commands (`make:feature:type`)
-
-All sub-commands support flexible positional paths. If multiple arguments follow the feature name, the last one is treated as the class name and the middle ones as roles/sub-paths.
-
-#### `make:feature:controller`
-
-```bash
-# Simple: app/Features/Auth/Controllers/LoginController.php
-php artisan make:feature:controller Auth Login
-
-# Role-Based: app/Features/Dashboard/Admin/Controllers/ReportController.php
-php artisan make:feature:controller Dashboard Admin Report
-```
-
-#### `make:feature:service`
-
-```bash
-# Simple: app/Features/Payment/Services/CheckoutService.php
-php artisan make:feature:service Payment Checkout
-
-# Role-Based: app/Features/Dashboard/User/Services/ProfileService.php
-php artisan make:feature:service Dashboard User Profile
-```
-
-#### `make:feature:request`
-
-```bash
-# Simple: app/Features/Auth/Requests/RegisterRequest.php
-php artisan make:feature:request Auth Register
-
-# Role-Based: app/Features/Dashboard/Admin/Requests/UpdateSettingsRequest.php
-php artisan make:feature:request Dashboard Admin UpdateSettings
-```
-
-#### `make:feature:event`
-
-```bash
-# Simple: app/Features/Order/Events/OrderPlaced.php
-php artisan make:feature:event Order OrderPlaced
-
-# Role-Based: app/Features/Project/Client/Events/FileUploaded.php
-php artisan make:feature:event Project Client FileUploaded
-```
-
-#### `make:feature:exception`
-
-```bash
-# Simple: app/Features/Auth/Exceptions/InvalidTokenException.php
-php artisan make:feature:exception Auth InvalidToken
-
-# Role-Based: app/Features/Payment/Stripe/Exceptions/PaymentFailedException.php
-php artisan make:feature:exception Payment Stripe PaymentFailed
-```
-
-#### `make:feature:observer`
-
-```bash
-# Simple: app/Features/Project/Observers/TaskObserver.php
-php artisan make:feature:observer Project Task
-
-# Role-Based: app/Features/Support/Admin/Observers/TicketObserver.php
-php artisan make:feature:observer Support Admin Ticket
-```
-
-> **Pro Tip:** All sub-commands automatically append the appropriate suffix (Controller, Service, Request, Exception, Observer) if you omit it.
-
----
 
 ## 🎨 13. Tailwind CSS v4 Design System
 
@@ -1182,7 +987,7 @@ updated_at      TIMESTAMP
 | **Custom Hooks**    | 20+ Inertia accessor hooks                                         | `resources/js/Hooks/useInertia.js`        |
 | **JS Utilities**    | 11 utility modules                                                 | `resources/js/Utils/`                     |
 | **Design Tokens**   | Tailwind v4 @theme                                                 | `resources/css/app.css`                   |
-| **CLI Scaffolding** | 7 make:feature:\* commands                                         | `app/Console/Commands/`                   |
+| **Administrative Command** | Cleanup of traffic logs                | `app/Console/Commands/CleanupTrafficLogs.php` |
 
 ---
 
@@ -1219,10 +1024,10 @@ Feature Kit uses a **Event-Driven Unified Notification System** that decouple fe
 
 ### `NotificationCreated` Event
 
-A single, global event (`App\Features\Notification\Events\NotificationCreated`) is used to trigger notifications across the entire application.
+A single, global event (`App\Events\NotificationCreated`) is used to trigger notifications across the entire application.
 
 ```php
-use App\Features\Notification\Events\NotificationCreated;
+use App\Events\NotificationCreated;
 
 // Dispatch from any Service or Controller
 event(new NotificationCreated(
@@ -1233,63 +1038,52 @@ event(new NotificationCreated(
 ));
 ```
 
-#### NotificationCreated Event Map
-
-| Argument   | Type     | Required               | Description                                                                                      |
-| :--------- | :------- | :--------------------- | :----------------------------------------------------------------------------------------------- |
-| `user`     | `User`   | **Yes**                | The Eloquent model instance of the user receiving the notification.                              |
-| `title`    | `string` | **Yes**                | The explicit bold summary title shown in the notification list.                                  |
-| `message`  | `string` | **Yes**                | The detailed descriptive payload of the notification.                                            |
-| `category` | `string` | No (default: `system`) | Categorizes the notification for backend log aggregations (e.g. `Account`, `System`, `Billing`). |
-
 ### `CreateNotificationRecord` Listener
 
-The listener (`App\Features\Notification\Listeners\CreateNotificationRecord`) is automatically registered in `AppServiceProvider`. It handles:
+The listener (`App\Listeners\CreateNotificationRecord`) is automatically registered in `AppServiceProvider`. It handles background creation of notification records in the database.
 
-- **Queueing**: Implements `ShouldQueue` to run in the background.
-- **Role Detection**: Automatically routes notifications to `AdminNotification` or `UserNotification` tables based on the user's role.
+### Creating New Events
 
-### Creating New Feature Events
-
-To create a new event for a specific feature, use the scaffolder:
+To create a new event, use the standard Artisan command:
 
 ```bash
-php artisan make:feature:event {FeatureName} {EventName}
+php artisan make:event {EventName}
 ```
 
 ---
 
 ---
 
-## 🏗️ 19. Advanced Feature Patterns
-
-### Independent User Models
-
-For complex role-based systems, Feature Kit recommends using **Feature-Specific User Models** (e.g., `App\Features\Profile\Admin\Models\User`).
-
-- **Decoupling**: Prevents the core `App\Models\User` from becoming a "God Class".
-- **Specialization**: Allows adding role-specific scopes, accessors, and relationships without cluttering other parts of the app.
+## 🏗️ 19. Advanced Development Patterns
 
 ### Secure Private Storage & Modular Delivery
 
 Feature Kit implements a secure pattern for sensitive files like profile images:
 
 1. **Private Storage**: Files are stored in `storage/app/private/` (not publicly accessible via URL).
-2. **Modular Controller**: A dedicated `ProfileImageController` within the `Profile` feature serves these images.
-3. **Role-Aware Routing**: Secure routes (e.g., `/admin/profile-image`) are defined within the feature's `web.php`, ensuring users can only access their own files or authorized assets.
+2. **Modular Controller**: Dedicated `ProfileImageController` classes (one for Admin, one for User) serve these images.
+3. **Role-Aware Routing**: Secure routes (e.g., `/admin/profile-image`) ensure users can only access authorized assets.
+
+### Consolidated Models
+
+Instead of duplicating models across domains, Feature Kit uses a centralized `app/Models` directory. This ensures that models like `User`, `Notification`, and `ActivityLog` have a single source of truth for relationships and logic.
 
 ---
 
-## 📈 19. Activity Logs System
+## 📈 20. Activity Logs System
 
 Feature Kit provides a highly extensible, **Event-Driven Activity Logging System** that captures and stores user interactions automatically.
 
 ### The `ActivityLogged` Event & `CreateActivityLogRecord` Listener
 
-The system uses a synchronous event-listener combination to guarantee log capture, ensuring that audit trails are reliable even without background workers active.
+The system uses a synchronous event-listener combination to guarantee log capture.
+
+- **Event**: `App\Events\ActivityLogged`.
+- **Listener**: `App\Listeners\CreateActivityLogRecord`.
+- **Model**: `App\Models\ActivityLog`.
 
 ```php
-use App\Features\ActivityLog\Events\ActivityLogged;
+use App\Events\ActivityLogged;
 
 // Dispatch from any Service
 event(new ActivityLogged(
@@ -1299,112 +1093,61 @@ event(new ActivityLogged(
 ));
 ```
 
-The listener (`CreateActivityLogRecord`) captures:
-
-- `user_id` and polymorphic `subject_type`
+The listener captures:
+- `user_id`
 - The `action` keyword
 - Detailed `description`
-- `ip_address` and `user_agent`
+- `ip_address` and `user_agent` (automatically resolved)
 
 ### Flexible UI Badges
 
-The Activity Logs UI automatically scales with your application. The `getActionMeta` utility on the frontend maps standard keywords inside your action strings to visually distinct badges.
-
-| Action Keyword Match                 | Badge Color | Description                                              |
-| :----------------------------------- | :---------- | :------------------------------------------------------- |
-| `create`, `add`, `store`             | **Green**   | Best for resources being added to the database.          |
-| `update`, `edit`                     | **Blue**    | Best for standard modification of resources.             |
-| `delete`, `remove`, `destroy`        | **Red**     | Best for destructive UI actions (deletion or archiving). |
-| `login`, `auth`                      | **Emerald** | Reserved for authentication milestones.                  |
-| `fail`, `error`                      | **Red**     | Highlights failed transactions or exceptions.            |
-| `password`, `security`               | **Amber**   | Critical for tracking sensitive user credential changes. |
-| `setting`, `config`                  | **Purple**  | Settings or application environment modifications.       |
-| `view`, `read`, `download`, `export` | **Indigo**  | Best for read-only tracking or exporting artifacts.      |
-| _No Match_                           | **Gray**    | Automatic title-casing fallback for custom events.       |
-
-If no keyword matches, it gracefully transforms the action name (e.g., `invoice_generated`) into a readable format ("Invoice Generated") and categorizes it with a neutral gray badge.
+The Activity Logs UI uses the `getActionMeta` utility on the frontend to map keywords to visually distinct badges (Green for `create`, Blue for `update`, Red for `delete`, etc.).
 
 ---
 
-## 🏛️ 20. Core Administrative Hubs
+## 🏛️ 21. Core Administrative Hubs
 
-Feature Kit provides 4 scaffolded administration points, carefully isolated into feature domains and powered by thin-controller, thick-service architectures. Each hub perfectly illustrates how to execute complex logic without polluting controllers.
+Feature Kit provides 4 scaffolded administration points, organized into role-based controllers and powered by thick services.
 
-### 👥 1. User Management (`App\Features\UserManagement`)
+### 👥 1. User Management
 
-A comprehensive control center replacing basic scaffolding, wired to a dedicated `UserService`.
+Managed via `UserController` and `UserService` in the `Admin` namespace.
 
-- **Live Pagination & Search**: Automatically synchronizes UI parameters with Inertia queries.
-- **Secure Provisioning**: An isolated "Add User" modal that directly validates against `StoreUserRequest` and properly hashes credentials before executing DB insertions.
-- **Role & Access Interceptors**: You can safely flip User flags (`is_active` for banning, `role` for elevation) utilizing `UpdateUserRequest`.
-- **Automatic Audit Trails**: The `UserService` dynamically detects toggle changes, such as suspending an account, and automatically fires `ActivityLogged` events.
+- **Live Pagination & Search**: Synchronized UI parameters with Inertia queries.
+- **Secure Provisioning**: Isolated "Add User" modal with `StoreUserRequest`.
+- **Role & Access Interceptors**: Manage `is_active` and `role` flags.
+- **Automatic Audit Trails**: `UserService` fires `ActivityLogged` events for status changes.
 
+### ⚡ 2. UI Cache Management
+
+Exposes Artisan commands via `CacheController` and `CacheService`.
+
+- Safely flush `cache`, `route`, `config`, `view`, or `optimize`.
+
+### ❤️ 3. System Health Monitor
+
+A "Live Metrics" dashboard analyzed via `HealthController` and `HealthStatusService`.
+
+- **Checks**: PDO SQL Integrity, Caching Driver Latency, Hardware Config (memory limits), and Stack Diagnostics.
+
+### 📊 4. Professional Dashboards
+
+Logic is split into `AdminDashboardService` and `UserDashboardService`.
+
+- **Admin Dashboard**: System-wide performance, user counts, and global activity.
+- **User Dashboard**: Personalized welcome hub, profile completion health, and private activity feed.
+
+### ⚙️ 5. System Settings & Branding
+
+Managed via `SettingsController` and `SettingsService`.
+
+- **Dynamic Branding**: Update App Name, Logo, and Favicon instantly.
+- **Favicon Engine**: `FaviconUtil` for ICO conversion.
+- **Maintenance Mode**: `CheckMaintenanceMode` middleware with Admin bypass and Inertia support.
+
+Usage:
 ```php
-// Inside UserService.php
-if ($user->isDirty('is_active')) {
-    $statusText = $user->is_active ? 'Un-suspended' : 'Suspended';
-    event(new ActivityLogged(auth()->user(), "account_status", "{$statusText} user: {$user->email}"));
-}
-```
-
-### ⚡ 2. UI Cache Management (`App\Features\CacheManagement`)
-
-A powerful, graphical representation for server configuration caching.
-
-- The `CacheService` prevents bloated controllers by extracting specific `Artisan::call()` mapping logic into dedicated helper methods.
-- Safely exposes flushing commands via UI: `cache:clear`, `route:clear`, `config:clear`, `view:clear`, or `optimize:clear`.
-- Utilizes the global `ModalContext` on the frontend before executing destructive Artisan commands.
-
-### ❤️ 3. System Health Monitor (`App\Features\SystemHealth`)
-
-A visually striking "Live Metrics" dashboard analyzing the environment.
-
-Instead of performing connections inside the controller, the modular `HealthStatusService` runs runtime checks to fetch:
-
-1. **PDO SQL Integrity**: Verifying the current database connection is stable.
-2. **Caching Driver Latency**: Assessing if Redis/Memcached is responding quickly.
-3. **Hardware Config Constraints**: Reading `ini_get('memory_limit')` to warn about potential OOM issues.
-4. **Stack Diagnostics**: Displaying precise Laravel and PHP versions via `app()->version()` and `phpversion()`.
-
-### 📊 4. Professional Dashboards (`App\Features\Dashboard`)
-
-Designed exclusively to prove the power of cleanly separating queries away from the HTTP layer.
-
-The logic is split into Role-Based folders (`Admin` and `User`). We strictly abstract metric queries and relation loads into their respective `AdminDashboardService` and `UserDashboardService`.
-
-#### The Admin Dashboard
-
-Tracks broad system performance overviews by calculating active vs suspended users, measuring total action milestones, and fetching the 10 most recent global `ActivityLogs` from across the entire app.
-
-#### The User Dashboard
-
-A personalized welcome hub that tracks the individual's exact `member_since` diff (e.g. "1 month ago"). It dynamically calculates a **Profile Completion Health** by evaluating fields like `profile_image`, `phone` and generates a responsive UI progress bar. Finally, it exposes a localized, private feed of their own event log history.
-
-```php
-// Example: Thin Dashboard Controller
-public function index() {
-    $user = Auth::user();
-    return inertia('(portals)/user/dashboard/page', [
-        'stats' => $this->dashboardService->getUserStats($user),
-        'recent_activity' => $this->dashboardService->getRecentActivity($user, 10)
-    ]);
-}
-```
-
-### ⚙️ 5. System Settings & Branding (`App\Features\SystemSettings`)
-
-The definitive hub for managing application identity and availability without touching code.
-
-- **Dynamic Branding**: Managed via `SettingsService`, allowing instant updates to the App Name, Logo (stored in `public/logo.png`), and Favicon.
-- **Favicon Engine**: Uses `FaviconUtil` (GD-powered) to convert any uploaded image into a professional 32x32 `.ico` file.
-- **Smart Maintenance Mode**: A custom middleware-based system (`CheckMaintenanceMode`) with:
-    - **Admin Bypass**: Keeps admins productive by allowing access to `/admin` and `/auth` routes.
-    - **Inertia Reload Logic**: Detects SPA requests and forces a full refresh to the maintenance page.
-    - **Custom 503 Page**: A premium, branded template showing the estimated duration.
-
-```php
-// Usage Pattern
-\App\Features\SystemSettings\Models\Setting::get('maintenance_duration', '15 mins');
+\App\Models\Setting::get('maintenance_duration', '15 mins');
 ```
 
 ---
@@ -1415,30 +1158,22 @@ MIT Licensed. Open for everyone to scale.
 
 ---
 
-## 📊 21. Traffic Analytics Console
+## 📊 22. Traffic Analytics Console
 
-**Feature path:** `App\Features\TrafficAnalytics`
+The Traffic Analytics system is a built-in, **full-stack analytics console** — a self-hosted alternative to Google Analytics.
 
-The Traffic Analytics feature is a built-in, **full-stack analytics console** — a self-hosted alternative to Google Analytics that runs entirely within your Laravel application. No third-party service, no data leaving your server.
+- **Middleware**: `App\Http\Middleware\TrackTraffic`.
+- **Job**: `App\Jobs\ProcessTrafficLog`.
+- **Model**: `App\Models\TrafficLog`.
+- **Service**: `App\Services\Admin\TrafficAnalyticsService`.
+- **Controller**: `App\Http\Controllers\Admin\TrafficController`.
 
-### Architecture Overview
+### Logic Flow
 
-```
-app/Features/TrafficAnalytics/
-├── Middleware/
-│   └── TrackTraffic.php         # Intercepts requests, captures timing & IP
-├── Jobs/
-│   └── ProcessTrafficLog.php    # Queue job: geo lookup, UA parsing, DB insert
-├── Models/
-│   └── TrafficLog.php           # Eloquent model with scopes & casts
-└── Admin/
-    ├── Controllers/
-    │   └── TrafficController.php # index(), logs(), realtime()
-    ├── Services/
-    │   └── TrafficAnalyticsService.php # 16 aggregation methods
-    └── routes/
-        └── web.php              # /admin/traffic, /admin/traffic/logs, /admin/traffic/realtime
-```
+1. **TrackTraffic Middleware**: Intercepts requests, captures timing & IP, and dispatches the background job.
+2. **ProcessTrafficLog Job**: Runs async to perform geo lookup, UA parsing, and database insertion.
+3. **TrafficAnalyticsService**: Aggregates the log data into 16+ metrics for the dashboard.
+4. **TrafficController**: Serves the dashboard UI, paginated logs, and real-time polling data.
 
 ### Database Schema (`traffic_logs` table)
 

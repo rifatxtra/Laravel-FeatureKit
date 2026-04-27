@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "rifatxtra/laravel-feature-kit",
-    "version": "v2.2.0",
+    "version": "v3.0.0",
     "type": "project",
-    "description": "The professional Laravel Feature-Driven Starter Kit (Laravel Feature Kit) with Inertia.js v2, React 19, and Tailwind CSS v4.",
+    "description": "The professional Laravel MVC Starter Kit (Laravel Feature Kit) with Inertia.js v3, React 19, and Tailwind CSS v4.",
     "keywords": [
         "laravel",
         "inertiajs",

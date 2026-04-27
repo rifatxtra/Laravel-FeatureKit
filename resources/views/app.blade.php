@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="{{ \App\Features\SystemSettings\Models\Setting::get('app_favicon', asset('favicon.ico')) }}">
+    <link rel="icon" type="image/x-icon" href="{{ \App\Models\Setting::get('app_favicon', asset('favicon.ico')) }}">
 
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])

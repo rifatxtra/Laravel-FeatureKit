@@ -1,10 +1,10 @@
 @extends('pages.layout')
 
 @section('title', 'Features - Laravel Feature Kit')
-@section('description', 'Discover every feature in Laravel Feature Kit v2.2.0. Feature-Driven Architecture, React 19, 20+ hooks, 11 utilities, 7 Artisan commands, analytics console, and more.')
-@section('keywords', 'Laravel Features, Feature-Driven Architecture, React 19, Inertia.js, Laravel Utilities, SaaS Features')
+@section('description', 'Discover every feature in Laravel Feature Kit v3.0.0. Professional MVC Architecture, React 19, 20+ hooks, 11 utilities, analytics console, and more.')
+@section('keywords', 'Laravel Features, MVC Architecture, React 19, Inertia.js, Laravel Utilities, SaaS Features')
 @section('og_title', 'Features - Laravel Feature Kit')
-@section('og_description', 'Explore the powerful feature-driven architecture and pre-built systems of Laravel Feature Kit.')
+@section('og_description', 'Explore the powerful MVC architecture and pre-built systems of Laravel Feature Kit.')
 @section('og_url', 'https://featurekit.rifatxtra.com/features')
 
 @section('content')
@@ -53,7 +53,7 @@
                     <ul class="space-y-4">
                         <li class="flex items-center text-foreground font-medium">
                             <svg class="h-5 w-5 text-green-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                            Self-contained app/Features/{Name} domains
+                            Standardized, Role-Based MVC
                         </li>
                         <li class="flex items-center text-foreground font-medium">
                             <svg class="h-5 w-5 text-green-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -61,7 +61,7 @@
                         </li>
                         <li class="flex items-center text-foreground font-medium">
                             <svg class="h-5 w-5 text-green-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                            Automatic route discovery per feature
+                            Explicit & Performant Centralized Routing
                         </li>
                         <li class="flex items-center text-foreground font-medium">
                             <svg class="h-5 w-5 text-green-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -78,18 +78,17 @@
                 <div class="aspect-square bg-gradient-to-tr from-primary to-primary/30 rounded-full opacity-10 absolute -inset-10 animate-pulse"></div>
                 <div class="relative p-12 bg-surface rounded-3xl border border-surface-foreground/10 shadow-2xl">
                     <code class="text-sm text-primary">
-                        <span class="block mb-2">// The Feature-Driven Future</span>
-                        <span class="block opacity-60">app/Features/Payment/</span>
-                        <span class="block ml-4 opacity-40">├── Controllers/</span>
+                        <span class="block mb-2">// The Clean MVC Structure</span>
+                        <span class="block opacity-60">app/</span>
+                        <span class="block ml-4 opacity-40">├── Http/Controllers/</span>
                         <span class="block ml-4 opacity-40">├── Services/</span>
                         <span class="block ml-4 opacity-40">├── Models/</span>
                         <span class="block ml-4 opacity-40">├── Requests/</span>
-                        <span class="block ml-4 opacity-40">├── Observers/</span>
                         <span class="block ml-4 opacity-40">├── Events/</span>
-                        <span class="block ml-4 opacity-40">├── Exceptions/</span>
-                        <span class="block ml-4 opacity-40">└── routes/</span>
-                        <span class="block ml-8 opacity-30">├── web.php  (auto-discovered)</span>
-                        <span class="block ml-8 opacity-30">└── api.php  (auto-discovered)</span>
+                        <span class="block ml-4 opacity-40">└── Mail/</span>
+                        <span class="block mt-4 opacity-60">routes/</span>
+                        <span class="block ml-4 opacity-30">├── web.php</span>
+                        <span class="block ml-4 opacity-30">└── api.php</span>
                     </code>
                 </div>
             </div>
@@ -99,13 +98,13 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-24">
             <div class="p-10">
                 <div class="text-5xl font-black text-primary mb-2">01</div>
-                <h4 class="text-xl font-bold mb-2">Isolation</h4>
-                <p class="text-surface-foreground/60">Deleting a feature is as easy as deleting its folder. No hunt for scattered files across dozens of directories.</p>
+                <h4 class="text-xl font-bold mb-2">Clarity</h4>
+                <p class="text-surface-foreground/60">Everything has a place. No more wondering where to put your business logic or validation rules.</p>
             </div>
             <div class="p-10">
                 <div class="text-5xl font-black text-primary mb-2">02</div>
                 <h4 class="text-xl font-bold mb-2">DX First</h4>
-                <p class="text-surface-foreground/60">Next.js style frontend patterns, 7 artisan scaffolders, auto-layout injection, and a single dev command to start everything.</p>
+                <p class="text-surface-foreground/60">Next.js style frontend patterns, auto-layout injection, and a single dev command to start everything.</p>
             </div>
             <div class="p-10">
                 <div class="text-5xl font-black text-primary mb-2">03</div>
@@ -118,7 +117,7 @@
         <div class="text-center mb-12">
             <h2 class="text-3xl font-extrabold text-foreground sm:text-4xl mb-4">Everything Included</h2>
             <p class="max-w-2xl mx-auto text-lg text-surface-foreground/60">
-                A deep look at every system that ships with Feature Kit v2.2.0.
+                A deep look at every system that ships with Feature Kit v3.0.0.
             </p>
         </div>
 
@@ -130,8 +129,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-foreground mb-2">Feature-Driven Architecture</h3>
-                <p class="text-sm text-surface-foreground/60">Self-contained domains with dedicated Controllers, Services, Models, Requests, Observers, Events, Exceptions, and auto-discovered Routes.</p>
+                <h3 class="text-xl font-bold text-foreground mb-2">Professional MVC Architecture</h3>
+                <p class="text-sm text-surface-foreground/60">Logic is organized into standard Laravel directories, with role-based subfolders for better scaling and isolation.</p>
             </div>
 
             {{-- Feature 2: Auto Route Discovery --}}
@@ -141,8 +140,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-foreground mb-2">Auto Route Discovery</h3>
-                <p class="text-sm text-surface-foreground/60">Routes in <code>app/Features/*/routes/</code> are scanned and registered at boot. Role-based features get automatic URL and name prefixes.</p>
+                <h3 class="text-xl font-bold text-foreground mb-2">Centralized Routing</h3>
+                <p class="text-sm text-surface-foreground/60">Routes are centrally managed in routes/web.php and routes/api.php for maximum performance and visibility.</p>
             </div>
 
             {{-- Feature 3: Hybrid Frontend --}}
@@ -153,7 +152,7 @@
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold text-foreground mb-2">Hybrid Frontend Strategy</h3>
-                <p class="text-sm text-surface-foreground/60">Blade + Tailwind v4 for SEO pages (landing, docs, auth). React 19 + Inertia.js v2 for SPA portals with Next.js App Router style folder structure.</p>
+                <p class="text-sm text-surface-foreground/60">Blade + Tailwind v4 for SEO pages (landing, docs, auth). React 19 + Inertia.js v3 for SPA portals with Next.js App Router style folder structure.</p>
             </div>
 
             {{-- Feature 4: Auto Layouts --}}
@@ -211,16 +210,7 @@
                 <p class="text-sm text-surface-foreground/60">useAuth, useUser, useHasRole, useHasPermission, useFlash, useErrors, useRoute, useIsRoute, useCsrfToken, useAppConfig, and more — all barrel exported.</p>
             </div>
 
-            {{-- Feature 9: Artisan Commands --}}
-            <div class="relative p-6 bg-surface rounded-2xl border border-surface-foreground/5 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-center justify-center h-12 w-12 rounded-xl bg-primary text-white shadow-lg mb-4">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-foreground mb-2">7 Artisan Scaffolders</h3>
-                <p class="text-sm text-surface-foreground/60">make:feature (+ --roles), make:feature:controller, :service, :request, :event, :exception, :observer. Supports role-based nested paths.</p>
-            </div>
+
 
             {{-- Feature 10: Tailwind v4 --}}
             <div class="relative p-6 bg-surface rounded-2xl border border-surface-foreground/5 shadow-sm hover:shadow-md transition-shadow">
@@ -361,8 +351,8 @@
             <h2 class="text-2xl font-extrabold text-foreground text-center mb-10">Laravel Feature Kit by the Numbers</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
-                    <div class="text-4xl font-black text-primary">7</div>
-                    <p class="text-sm text-surface-foreground/60 mt-1">Artisan Commands</p>
+                    <div class="text-4xl font-black text-primary">1</div>
+                    <p class="text-sm text-surface-foreground/60 mt-1">Maintenance Command</p>
                 </div>
                 <div>
                     <div class="text-4xl font-black text-primary">11</div>

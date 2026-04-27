@@ -1,7 +1,7 @@
 @extends('pages.layout')
 
 @section('title', 'Documentation - Laravel Feature Kit')
-@section('description', 'Complete technical documentation for Laravel Feature Kit v2.2.0. Architecture, utilities, traffic analytics console, and more.')
+@section('description', 'Complete technical documentation for Laravel Feature Kit v3.0.0. Architecture, utilities, traffic analytics console, and more.')
 @section('keywords', 'Laravel Documentation, Feature Kit Docs, API Guide, Technical Docs, Framework Reference')
 @section('og_title', 'Documentation - Laravel Feature Kit')
 @section('og_description', 'Master the Laravel Feature Kit with our comprehensive technical documentation and guides.')
@@ -40,11 +40,6 @@
                         <li><a href="#installation" class="text-sm text-foreground hover:text-primary transition-colors block py-2 px-3 rounded-lg bg-primary/5 border border-primary/10">Installation</a></li>
                         <li><a href="#architecture" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Architecture</a></li>
                         <li><a href="#frontend" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Frontend Strategy</a></li>
-                        <li><a href="#commands" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Artisan Commands</a></li>
-                    </ul>
-
-                    <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mt-8">Systems</h3>
-                    <ul class="mt-4 space-y-2">
                         <li><a href="#mail" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Mailing System</a></li>
                         <li><a href="#notifications" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Notification System</a></li>
                         <li><a href="#activity-logs" class="text-sm text-surface-foreground/60 hover:text-primary transition-colors block py-2 px-3 rounded-lg border border-transparent">Activity Logs</a></li>
@@ -64,7 +59,7 @@
                 {{-- INSTALLATION --}}
                 <section id="installation">
                     <h2 class="text-3xl font-extrabold text-foreground mb-6">Introduction & Setup</h2>
-                    <p class="text-lg">Welcome to the <strong>Laravel Feature Kit</strong>. This documentation covers every system, pattern, and utility in the project — from the Feature-Driven Architecture to the 11-module JavaScript utility suite.</p>
+                    <p class="text-lg">Welcome to the <strong>Laravel Feature Kit</strong>. This documentation covers every system, pattern, and utility in the project — from the Professional MVC Architecture to the 11-module JavaScript utility suite.</p>
 
                     <h3 class="text-xl font-bold text-foreground mt-8 mb-4 tracking-tight uppercase text-xs text-primary">Prerequisites</h3>
                     <ul class="list-disc pl-5 mt-4 space-y-2 opacity-80">
@@ -106,23 +101,20 @@ composer dev</code></pre>
                     </div>
                 </section>
 
-                {{-- ARCHITECTURE --}}
-                <section id="architecture" class="mt-16 border-t border-surface-foreground/10 pt-10">
-                    <h2 class="text-3xl font-extrabold text-foreground mb-6">Mastering "Domains"</h2>
-                    <p>Unlike standard Laravel setups where logic is split across multiple top-level folders, Feature Kit uses <strong>Feature-Driven Design (FDD)</strong>. Every piece of your app—from models to routes—is a self-contained feature.</p>
+                    <h2 class="text-3xl font-extrabold text-foreground mb-6">Standardized MVC Architecture</h2>
+                    <p>Laravel Feature Kit follows a <strong>Professional MVC Architecture</strong>. Logic is organized into standard Laravel directories, with role-based subfolders for better scaling and isolation.</p>
 
-                    <h3 class="text-xl font-bold text-foreground mt-10 mb-4">Feature Folder Structure</h3>
-                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner mb-4"><code>app/Features/Payment/
-├── Controllers/       # Thin HTTP layer
-├── Services/          # Business logic ("the brain")
-├── Models/            # Eloquent models
-├── Requests/          # Form validation
-├── Observers/         # Model lifecycle hooks
+                    <h3 class="text-xl font-bold text-foreground mt-10 mb-4">Core Directory Structure</h3>
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner mb-4"><code>app/
+├── Http/
+│   ├── Controllers/   # Organized by Role (Admin, User, Auth)
+│   ├── Middleware/    # Shared & Global gates
+│   └── Requests/      # Role-based validation
+├── Services/          # Complex business logic
+├── Models/            # Unified data models
 ├── Events/            # Domain events
-├── Exceptions/        # Feature-specific errors
-└── routes/
-    ├── web.php        # Auto-discovered!
-    └── api.php        # Auto-discovered!</code></pre>
+├── Listeners/         # Event handlers
+└── Mail/              # Professional mailing system</code></pre>
 
                     <h3 class="text-xl font-bold text-foreground mt-10 mb-4">The Logic Stack</h3>
                     <div class="space-y-6">
@@ -163,8 +155,8 @@ $this->noContent();      // 204</code></pre>
                         </div>
                     </div>
 
-                    <h3 class="text-xl font-bold text-foreground mt-10 mb-4">Auto Route Discovery</h3>
-                    <p>Routes inside <code>app/Features/*/routes/web.php</code> are scanned and registered automatically at boot. No manual <code>Route::group()</code> needed. For role-based features (e.g., <code>Dashboard/Admin</code>), routes automatically receive URL and name prefixes based on the role folder name.</p>
+                    <h3 class="text-xl font-bold text-foreground mt-10 mb-4">Centralized Routing</h3>
+                    <p>Routes are centrally managed in <code>routes/web.php</code> and <code>routes/api.php</code>. This ensures high performance and clear visibility of your application's entry points.</p>
                 </section>
 
                 {{-- FRONTEND --}}
@@ -187,7 +179,7 @@ $this->noContent();      // 204</code></pre>
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                             </div>
                             <div>
-                                <h4 class="font-bold text-foreground text-lg mb-1">React 19 + Inertia.js v2 (SPA Layer)</h4>
+                                <h4 class="font-bold text-foreground text-lg mb-1">React 19 + Inertia.js v3 (SPA Layer)</h4>
                                 <p class="text-sm opacity-80 leading-relaxed">Internal portals enjoy a full SPA experience. We use folder-based routing similar to Next.js App Router (<code>pages/(portals)/admin/dashboard/page.jsx</code>). Every page is automatically wrapped in <code>MainLayout</code> with Toast, Modal, and LoadingSpinner — zero configuration needed.</p>
                             </div>
                         </div>
@@ -293,7 +285,7 @@ $this->noContent();      // 204</code></pre>
 
                     <h3 class="text-xl font-bold text-foreground mt-8 mb-4">The <code>NotificationCreated</code> Event</h3>
                     <p>Trigger notifications from any Service or Controller using a single shared event:</p>
-                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner my-6"><code>use App\Features\Notification\Events\NotificationCreated;
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner my-6"><code>use App\Events\NotificationCreated;
 
 event(new NotificationCreated(
     user: $auth_user,
@@ -362,7 +354,7 @@ event(new NotificationCreated(
 
                     <h3 class="text-xl font-bold text-foreground mt-8 mb-4">The <code>ActivityLogged</code> Event</h3>
                     <p>Trigger activity logs from any Service using the shared event:</p>
-                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner my-6"><code>use App\Features\ActivityLog\Events\ActivityLogged;
+                    <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner my-6"><code>use App\Events\ActivityLogged;
 
 // Dispatch from any Service
 event(new ActivityLogged(
@@ -671,7 +663,7 @@ TrafficLog::errors()             // status_code >= 400</code></pre>
                     <h2 class="text-3xl font-extrabold text-foreground mb-6">Advanced Patterns</h2>
                     
                     <h3 class="text-lg font-bold text-foreground mt-8 mb-4">1. Independent User Models</h3>
-                    <p class="text-sm opacity-80 leading-relaxed">For large-scale apps, FeatureKit promotes <strong>Feature-Specific User Models</strong> (e.g., <code>App\Features\Profile\Admin\Models\User</code>). This prevents the core User model from becoming overloaded and allows for clean, domain-specific logic.</p>
+                    <p class="text-sm opacity-80 leading-relaxed">For large-scale apps, FeatureKit promotes <strong>Unified User Models</strong> (e.g., <code>App\Models\User</code>). This ensures a single source of truth for all authentication and profile logic across the application.</p>
 
                     <h3 class="text-lg font-bold text-foreground mt-8 mb-4">2. Private Storage & Secure Delivery</h3>
                     <p class="text-sm opacity-80 leading-relaxed mb-4">Sensitive assets like profile images are stored in <code>storage/app/private/</code>. Access is gated through modular feature controllers and role-protected routes.</p>
@@ -720,7 +712,7 @@ Route::get('/admin/profile-image', [ProfileImageController::class, 'show']);</co
 
                     <h3 class="text-xl font-bold text-foreground mt-10 mb-4">Implementation Details</h3>
                     <pre class="bg-surface p-4 rounded-xl border border-surface-foreground/10 text-primary overflow-x-auto shadow-inner my-6"><code>// Accessing settings in Blade or PHP
-\App\Features\SystemSettings\Models\Setting::get('app_name', 'Default');
+\App\Models\Setting::get('app_name', 'Default');
 
 // Logic inside CheckMaintenanceMode middleware
 if ($isMaintenance && !$isAdmin) {
@@ -728,68 +720,7 @@ if ($isMaintenance && !$isAdmin) {
 }</code></pre>
                 </section>
 
-                {{-- COMMANDS --}}
-                <section id="commands" class="mt-16 border-t border-surface-foreground/10 pt-10">
-                    <h2 class="text-3xl font-extrabold text-foreground mb-6">CLI Scaffolding (7 Commands)</h2>
-                    <p class="mb-8">We automated the "grunt work" so you don't have to manually create files for every new feature.</p>
 
-                    <div class="bg-surface rounded-2xl border border-surface-foreground/5 shadow-sm overflow-hidden">
-                        <div class="bg-primary/10 px-6 py-4 border-b border-primary/20">
-                            <h3 class="text-primary font-bold">Available Scaffolders</h3>
-                        </div>
-                        <div class="p-6 space-y-6">
-                            <div class="flex items-center justify-between border-b border-surface-foreground/5 pb-4">
-                                <div>
-                                    <code class="text-primary font-bold text-sm bg-primary/5 px-2 py-1 rounded">make:feature {Name}</code>
-                                    <p class="text-xs mt-1 opacity-60">Full domain scaffold: Controllers, Services, Models, Requests, Observers, Events, Exceptions, Routes.</p>
-                                </div>
-                                <span class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">POPULAR</span>
-                            </div>
-                            <div class="flex items-center justify-between border-b border-surface-foreground/5 pb-4">
-                                <div>
-                                    <code class="text-primary font-bold text-sm bg-primary/5 px-2 py-1 rounded">make:feature {Name} --roles=Admin,User</code>
-                                    <p class="text-xs mt-1 opacity-60">Role-based feature with separate sub-folders per role, auto-prefixed routes.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between border-b border-surface-foreground/5 pb-4">
-                                <div>
-                                    <code class="text-primary font-bold text-sm bg-primary/5 px-2 py-1 rounded">make:feature:controller {Feat} {Name}</code>
-                                    <p class="text-xs mt-1 opacity-60">Controller extending BaseController in the specified feature.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between border-b border-surface-foreground/5 pb-4">
-                                <div>
-                                    <code class="text-primary font-bold text-sm bg-primary/5 px-2 py-1 rounded">make:feature:service {Feat} {Name}</code>
-                                    <p class="text-xs mt-1 opacity-60">Service extending BaseService in the specified feature.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between border-b border-surface-foreground/5 pb-4">
-                                <div>
-                                    <code class="text-primary font-bold text-sm bg-primary/5 px-2 py-1 rounded">make:feature:request {Feat} {Name}</code>
-                                    <p class="text-xs mt-1 opacity-60">FormRequest with authorize() and rules() in the specified feature.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between border-b border-surface-foreground/5 pb-4">
-                                <div>
-                                    <code class="text-primary font-bold text-sm bg-primary/5 px-2 py-1 rounded">make:feature:event {Feat} {Name}</code>
-                                    <p class="text-xs mt-1 opacity-60">Event class with Dispatchable and SerializesModels traits.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between border-b border-surface-foreground/5 pb-4">
-                                <div>
-                                    <code class="text-primary font-bold text-sm bg-primary/5 px-2 py-1 rounded">make:feature:exception {Feat} {Name}</code>
-                                    <p class="text-xs mt-1 opacity-60">Exception extending BaseException in the specified feature.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <code class="text-primary font-bold text-sm bg-primary/5 px-2 py-1 rounded">make:feature:observer {Feat} {Name}</code>
-                                    <p class="text-xs mt-1 opacity-60">Observer with creating, created, updating, updated, deleting, deleted hooks.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
                 {{-- UTILITIES --}}
                 <section id="utilities" class="mt-16 border-t border-surface-foreground/10 pt-10">

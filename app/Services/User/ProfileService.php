@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Services\User;
+
+use App\Services\Service;
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Events\NotificationCreated;
+use App\Events\ActivityLogged;
+
+class ProfileService extends Service
+{
+    public function updateProfile($user, array $data)
+    {
+        if (isset($data['profile_image']) && $data['profile_image'] instanceof \Illuminate\Http\UploadedFile) {
+            // Delete old image if exists
+            if ($user->profile_image) {
+                $oldFilename = basename($user->profile_image);
+                Storage::disk('local')->delete('profile-image/' . $oldFilename);
+            }
+
+            $path = $data['profile_image']->store('profile-image', 'local');
+            $data['profile_image'] = basename($path); // Store only filename
+        }
+
+        $user->update($data);
+
+        event(new NotificationCreated($user, 'Profile Updated', 'Your profile details have been successfully updated.', 'system'));
+        event(new ActivityLogged($user, 'profile_updated', 'User profile details updated.', 'system'));
+
+        return $user;
+    }
+
+    public function updatePassword($user, string $newPassword)
+    {
+        $user->update([
+            'password' => Hash::make($newPassword),
+        ]);
+
+        event(new NotificationCreated($user, 'Password Changed', 'Your account password has been successfully updated.', 'system'));
+        event(new ActivityLogged($user, 'password_changed', 'User account password changed.', 'security'));
+
+        return $user;
+    }
+}

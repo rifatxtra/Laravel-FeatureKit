@@ -1,0 +1,36 @@
+🚀 Release Notes: Laravel Feature Kit v3.0.0
+We are thrilled to announce the release of Laravel Feature Kit v3.0.0. This version represents a significant milestone in our journey toward providing the most professional and scalable starter kit for Laravel developers.
+
+In this update, we’ve moved away from our custom "Feature-Driven" experimental structure to a Standardized, Professional MVC Architecture, while keeping all the powerful features you love.
+
+🏛️ v3.0.0: The MVC Evolution
+🏗️ Architectural Shift
+We have completely refactored the backend to follow standard Laravel conventions. This ensures maximum compatibility with the Laravel ecosystem, superior IDE support, and a more intuitive experience for teams.
+
+Unified Models: Models are now consolidated in app/Models/ as the single source of truth.
+Role-Based Layering: Controllers, Services, and FormRequests are now organized by role (Admin/, User/, Auth/) within their respective standard Laravel directories.
+Explicit Routing: We’ve retired the complex auto-discovery logic in favor of centralized, performant routing in routes/web.php and routes/api.php.
+⚡ Performance & Lean Core
+Faster Boot Times: Removing the recursive filesystem scan for routes significantly improves application performance.
+Leaner Command Set: We have removed the 7 custom Artisan scaffolding commands (make:feature, etc.). This refocuses the kit as a high-quality Starter Kit rather than a scaffolding engine, reducing maintenance overhead and technical debt.
+📊 Recap: What's in v2.2.0?
+If you missed our previous update, v2.2.0 introduced the Advanced Traffic Analytics Console — a professional, self-hosted alternative to Google Analytics.
+
+✨ Highlights
+3-Tab Dashboard: Overview, Real-Time, and Behavior analytics.
+Real-Time Monitoring: Live visitor stats polled every 15 seconds (no WebSockets required).
+Traffic Heatmap: 7×24 hour intensity grid to identify peak traffic times.
+Privacy First: Session tracking via privacy-safe hashes (GDPR-friendly, no cookies).
+Geo-Tracking: Country detection with flag emojis via ip-api.com.
+Performance Audit: Tracks per-request response time and HTTP status codes.
+🛠️ How to Upgrade
+As this is a major architectural overhaul, we recommend starting a fresh project and migrating your business logic into the new role-based folders.
+
+Create a new project: composer create-project rifatxtra/laravel-feature-kit
+Move your services to app/Services/{Role}/
+Move your logic from feature controllers to app/Http/Controllers/{Role}/
+Register your routes in routes/web.php
+🧡 Built for Developers
+This update makes the Feature Kit feel more like "Laravel" while retaining the "Superpowers" of our frontend React suite, hooks, and pre-built administrative hubs.
+
+Happy Coding! — Rifat & The Team

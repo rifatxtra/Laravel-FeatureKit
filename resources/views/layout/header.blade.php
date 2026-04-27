@@ -3,8 +3,8 @@
         <div class="w-full py-4 flex items-center justify-between border-b border-primary lg:border-none">
             <div class="flex items-center">
                 <a href="/">
-                    <span class="sr-only">{{ \App\Features\SystemSettings\Models\Setting::get('app_name', config('app.name')) }}</span>
-                    <img class="h-10 w-auto" src="{{ \App\Features\SystemSettings\Models\Setting::get('app_logo', asset('logo.png')) }}" alt="Logo">
+                    <span class="sr-only">{{ \App\Models\Setting::get('app_name', config('app.name')) }}</span>
+                    <img class="h-10 w-auto" src="{{ \App\Models\Setting::get('app_logo', asset('logo.png')) }}" alt="Logo">
                 </a>
                 <div class="hidden ml-10 space-x-8 lg:flex items-center">
                     <a href="{{ route('landing.features') }}" class="text-base font-medium text-foreground hover:text-primary transition-colors">Features</a>

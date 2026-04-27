@@ -1,8 +1,22 @@
-# 📦 rifatxtra/laravel-feature-kit (v2.2.0)
+# 📦 rifatxtra/laravel-feature-kit (v3.0.0)
 
 ### The Professional Laravel 12 Feature-Driven Starter Kit (Laravel Feature Kit).
 
 Built for developers who want to skip the "boring" setup and start building production-grade applications from day one.
+
+---
+
+## 🆕 What's New in v3.0.0
+
+### 🏛️ Professional MVC Architecture Overhaul
+The backend has been completely refactored from a feature-driven structure to a **standardized, professional Laravel MVC** architecture. This ensures maximum compatibility with the Laravel ecosystem, better IDE support, and a cleaner developer experience while keeping the powerful frontend features intact.
+
+#### ✨ Key Improvements
+- **Consolidated Models**: No more duplicate models! Core models live in `app/Models` as the single source of truth.
+- **Centralized Routing**: Removed complex auto-discovery logic for standard, explicit, and performant routing in `routes/web.php`.
+- **Organized Layering**: Controllers, Services, and Requests are now organized by role (`Admin`, `User`, `Auth`) within their standard Laravel directories.
+- **Improved Performance**: Faster boot times by removing filesystem-heavy route discovery.
+- **Standardized Naming**: Fixed various typos and inconsistent naming conventions across the backend.
 
 ---
 
@@ -26,12 +40,12 @@ The built-in traffic tracker has been completely rebuilt from a basic visitor lo
 
 #### 📂 New/Modified Files
 - `database/migrations/2026_04_11_…_add_advanced_fields_to_traffic_logs_table.php` — 6 new columns.
-- `app/Features/TrafficAnalytics/Models/TrafficLog.php` — new fillable fields, casts, and query scopes.
-- `app/Features/TrafficAnalytics/Middleware/TrackTraffic.php` — captures response time, status code, session ID; proxy-aware IP resolution.
-- `app/Features/TrafficAnalytics/Jobs/ProcessTrafficLog.php` — geo lookup, new vs returning detection, extended browser/OS/bot parsing.
-- `app/Features/TrafficAnalytics/Admin/Services/TrafficAnalyticsService.php` — 16 aggregations + real-time stats endpoint.
-- `app/Features/TrafficAnalytics/Admin/Controllers/TrafficController.php` — new `GET /admin/traffic/realtime` REST endpoint.
-- `app/Features/TrafficAnalytics/Admin/routes/web.php` — added realtime route.
+- `app/Models/TrafficLog.php` — consolidated model.
+- `app/Http/Middleware/TrackTraffic.php` — captures response time, status code, session ID; proxy-aware IP resolution.
+- `app/Jobs/ProcessTrafficLog.php` — geo lookup, new vs returning detection, extended browser/OS/bot parsing.
+- `app/Services/Admin/TrafficAnalyticsService.php` — 16 aggregations + real-time stats endpoint.
+- `app/Http/Controllers/Admin/TrafficController.php` — new `GET /admin/traffic/realtime` REST endpoint.
+- `routes/web.php` — added realtime route.
 - `resources/js/pages/(portals)/admin/traffic/page.jsx` — complete 3-tab dashboard redesign.
 - `resources/js/pages/(portals)/admin/traffic/logs/page.jsx` — enhanced with new columns and filters.
 - `bootstrap/app.php` — `trustProxies(at: '*')` for correct real-IP resolution.
@@ -52,9 +66,9 @@ You can now manage your application's identity and availability directly from th
 - **Source of Truth**: All settings are cached indefinitely using `Setting::get($key, $default)` for maximum performance.
 
 #### 📂 New/Modified Files:
-- `app/Features/SystemSettings/` — Entire domain for settings logic.
-- `app/Core/Utils/FaviconUtil.php` — Image to ICO conversion utility.
-- `app/Core/Middleware/CheckMaintenanceMode.php` — Advanced maintenance gate.
+- `app/Http/Requests/Admin/UpdateProfileRequest.php` — updated requests.
+- `app/Utils/FaviconUtil.php` — Image to ICO conversion utility.
+- `app/Http/Middleware/CheckMaintenanceMode.php` — Advanced maintenance gate.
 - `resources/views/errors/503.blade.php` — Premium branded downtime template.
 - `resources/js/pages/(portals)/admin/settings/page.jsx` — Interactive settings dashboard.
 
@@ -62,18 +76,17 @@ You can now manage your application's identity and availability directly from th
 
 ## 🚀 Key Features
 
-- **🏛️ Feature-Driven Architecture**: Self-contained domains in `app/Features/` — each feature owns its Controllers, Services, Models, Requests, Observers, Events, Exceptions & Routes.
+- **🏛️ Standardized MVC Architecture**: Clean separation of concerns with Controllers, Services, Models, and Requests organized into standard Laravel directories with role-based subfolders.
 - **⚛️ Next-Gen Frontend**: Next.js (App Router) style folder structure with React 19 + Inertia.js v3 for SPA portals. Blade + Tailwind v4 for SEO-critical pages.
 - **🛡️ Intelligent Layouts**: Automatic persistent layout injection (MainLayout) for all dashboard pages — zero configuration required.
 - **📬 Universal Mail System**: A single queued `GeneralMail` class with a professional Markdown master template handles every email in your app.
 - **🧰 11-Module JS Utility Suite**: Image Compression, Toast, Storage, Clipboard, Date, Number/Currency, String, Validation, Performance (debounce/throttle), and Web Vitals monitoring.
-- **🏗️ 7 Custom Artisan Commands**: Generate entire features, controllers, services, requests, events, observers, and exceptions with flexible positional arguments (e.g., `make:feature Auth` or `make:feature Dashboard Admin`).
 - **🎨 Tailwind CSS v4**: Semantic `@theme` design tokens (primary, secondary, surface, error, success) with OKLCH color space for accessible, white-label–ready theming.
 - **🔐 Complete Auth System**: Login, Register, Forgot Password, and Reset Password — fully coded with Blade views, form requests, and service-layer logic.
 - **🎯 Pre-Built UI Kit**: React components for Toast, Modal, LoadingSpinner, Pagination, SeoHead, BasicEditor (TipTap), and 5 PromoTemplate variants.
 - **🪝 20+ Custom React Hooks**: `useAuth`, `useUser`, `useHasRole`, `useHasPermission`, `useFlash`, `useErrors`, `useRoute`, and more — all in one barrel export.
 - **⚡ Single-Command Dev**: `composer dev` launches the Laravel server, queue listener, Pail log viewer, and Vite HMR simultaneously via `concurrently`.
-- **🗄️ Zero-Config Routing**: Routes inside `app/Features/*/routes/web.php` and `api.php` are auto-discovered at boot — no manual registration needed.
+- **🗄️ Clean Routing**: Centralized, explicit routing in `routes/web.php` and `routes/api.php` — no manual discovery overhead.
 - **🛡️ Built-in Middleware**: `HandleInertiaRequests` (shares auth, flash, CSRF, config to all pages) + `RoleMiddleware` (gate routes with `role:admin`).
 - **📊 Analytics Console**: Built-in full-stack traffic analytics with real-time monitoring, heatmaps, geo tracking, session metrics, and performance trends — no third-party service needed.
 
@@ -97,18 +110,17 @@ composer dev      # starts server + queue + logs + vite concurrently
 
 ```
 ├── app/
-│   ├── Console/Commands/       # 7 custom Artisan scaffolding commands
-│   ├── Core/                   # BaseController, BaseService, ApiResponseTrait, BaseException
-│   │   └── Middleware/         # HandleInertiaRequests, RoleMiddleware, CheckMaintenanceMode
-│   ├── Features/               # 🏛️ Feature-Driven Domains
-│   │   ├── Auth/               # Login, Register, ForgotPassword (full implementation)
-│   │   ├── TrafficAnalytics/   # 📊 Analytics console — middleware, job, service, dashboard
-│   │   │   ├── Middleware/     # TrackTraffic (response time, IP, session capture)
-│   │   │   ├── Jobs/           # ProcessTrafficLog (geo, bot detection, UA parsing)
-│   │   │   ├── Models/         # TrafficLog
-│   │   │   └── Admin/          # TrafficController, TrafficAnalyticsService, routes
-│   │   └── Landing/            # Home, Documentation, Features pages
-│   ├── Mail/                   # GeneralMail (universal queued mailable)
+│   ├── Http/
+│   │   ├── Controllers/        # 🎮 Controllers (Admin, User, Auth, Landing)
+│   │   ├── Middleware/         # 🛡️ Middleware (Inertia, Role, Maintenance, Traffic)
+│   │   └── Requests/           # ✅ Form Requests (Admin, User, Auth)
+│   ├── Services/               # 🧠 Business Logic (Admin, User, Auth)
+│   ├── Models/                 # 🗄️ Core Models (User, Notification, Setting, etc.)
+│   ├── Events/                 # 📢 Domain Events
+│   ├── Listeners/              # 👂 Event Listeners
+│   ├── Jobs/                   # ⚙️ Background Jobs
+│   ├── Mail/                   # 📬 Universal Mail System
+│   ├── Utils/                  # 🛠️ Helper Utilities (Favicon, etc.)
 │   └── Providers/              # AppServiceProvider
 ├── resources/
 │   ├── css/app.css             # Tailwind v4 @theme design tokens
@@ -157,7 +169,16 @@ composer dev      # starts server + queue + logs + vite concurrently
 
 ## 📋 Changelog
 
-### v2.2.0 — Traffic Analytics Console *(Current)*
+### v3.0.0 — Professional MVC Refactor *(Current)*
+- 🏗️ **Architecture Overhaul**: Refactored from FDD to standard Laravel MVC.
+- 🗄️ **Model Consolidation**: Unified models in `app/Models`.
+- 🎮 **Organized Controllers**: Role-based folders in `app/Http/Controllers`.
+- 🧠 **Service Layer**: Business logic moved to role-based `app/Services`.
+- ✅ **Standard Requests**: Validation moved to `app/Http/Requests`.
+- 🗄️ **Central Routing**: Removed auto-route discovery for central `routes/web.php`.
+- 🛡️ **Middleware & Events**: Moved to standard Laravel locations.
+
+### v2.2.0 — Traffic Analytics Console
 - ✨ Complete rebuild of Traffic Analytics into a 3-tab professional console
 - ✨ Real-time visitor monitoring via REST polling (no WebSockets)
 - ✨ 7×24 traffic heatmap, geographic breakdown with flag emojis

@@ -20,13 +20,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Support\Facades\Event::listen(
-            \App\Features\Notification\Events\NotificationCreated::class,
-            [\App\Features\Notification\Listeners\CreateNotificationRecord::class, 'handle']
+            \App\Events\NotificationCreated::class,
+            [\App\Listeners\CreateNotificationRecord::class, 'handle']
         );
 
         \Illuminate\Support\Facades\Event::listen(
-            \App\Features\ActivityLog\Events\ActivityLogged::class,
-            [\App\Features\ActivityLog\Listeners\CreateActivityLogRecord::class, 'handle']
+            \App\Events\ActivityLogged::class,
+            [\App\Listeners\CreateActivityLogRecord::class, 'handle']
         );
     }
 }
